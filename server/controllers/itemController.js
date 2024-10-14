@@ -1,26 +1,28 @@
 import Item from '../models/Item.js';
-import cacheService from '../services/cacheService.js';
+import redis from '../config/redis.js';
 
 export const getItems = async (req, res) => {
   try {
-    const cachedItems = await cacheService.get('items');
-    if (cachedItems) {
-      return res.json(JSON.parse(cachedItems));
-    }
-    
+    console.log('Attempting to fetch items from database');
     const items = await Item.find();
-    await cacheService.set('items', JSON.stringify(items), 3600);
+    console.log('Items fetched successfully:', items);
     res.json(items);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error in getItems controller:', error);
+    res.status(500).json({ 
+      message: 'Internal server error', 
+      error: error.message,
+      stack: error.stack 
+    });
   }
 };
 
 export const createItem = async (req, res) => {
+  const item = new Item(req.body);
   try {
-    const newItem = new Item(req.body);
-    await newItem.save();
-    await cacheService.del('items');
+    const newItem = await item.save();
+    // Invalidate cache
+    await redis.del('items');
     res.status(201).json(newItem);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -1,16 +1,14 @@
-import { zoomies } from "ldrs";
+import React from 'react';
+import { Spinner } from 'react-bootstrap';
 
 export function Loading() {
-  zoomies.register();
   return (
-    <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
-      <l-zoomies
-        size="80"
-        stroke="5"
-        bg-opacity="0.1"
-        speed="1.4"
-        color="black"
-        ></l-zoomies>
+    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
     </div>
   );
 }
+
+export default Loading;

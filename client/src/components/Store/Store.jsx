@@ -1,37 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
-import ItemCard from '../components/Store/ItemCard';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { useShoppingCart } from '../context/ShoppingCartContext';
+import axios from 'axios';
 
 function Store() {
-  const [items, setItems] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { addToCart } = useShoppingCart();
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchProducts = async () => {
       try {
-        setLoading(true);
-        const data = await api.getItems();
-        setItems(data);
+        const response = await axios.get('http://localhost:5000/api/items');
+        setProducts(response.data);
+        setLoading(false);
       } catch (err) {
-        setError('Failed to fetch items. Please try again later.');
-        console.error('Error fetching items:', err);
-      } finally {
+        setError('Failed to fetch products');
         setLoading(false);
       }
     };
-    fetchItems();
+
+    fetchProducts();
   }, []);
 
-  if (loading) return <div>Loading items...</div>;
+  if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="store">
-      {items.map(item => (
-        <ItemCard key={item._id} item={item} />
-      ))}
-    </div>
+    <Container className="mt-4">
+      <h1>Our Products</h1>
+      <Row>
+        {products.map((product) => (
+          <Col key={product._id} xs={12} md={4} className="mb-4">
+            <Card>
+              <Card.Img variant="top" src={product.imgUrl} />
+              <Card.Body>
+                <Card.Title>{product.name}</Card.Title>
+                <Card.Text>${product.price.toFixed(2)}</Card.Text>
+                <Card.Text>Color: {product.colorway}</Card.Text>
+                <Button onClick={() => addToCart(product)}>Add to Cart</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
 }
 
