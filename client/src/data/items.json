@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "Air Jordan 1",
+    "price": 416.0,
+    "colorway": "Chicago Lost And Found",
+    "imgUrl": "https://images.stockx.com/360/Air-Jordan-1-Retro-High-OG-Chicago-Reimagined/Images/Air-Jordan-1-Retro-High-OG-Chicago-Reimagined/Lv2/img01.jpg?auto=compress&w=480&dpr=2&updated_at=1665692308&h=320&fm=avif&q=60"
+  },
+  {
+    "id": 2,
+    "name": "Air Jordan 4",
+    "price": 392.0,
+    "colorway": "Motorsports Alternate",
+    "imgUrl": "https://images.stockx.com/360/Air-Jordan-4-Retro-Motorsports-Alternate/Images/Air-Jordan-4-Retro-Motorsports-Alternate/Lv2/img01.jpg?auto=compress&w=480&dpr=2&updated_at=1635279535&h=320&fm=avif&q=60"
+  },
+  {
+    "id": 3,
+    "name": "Air Jordan 7",
+    "price": 205.0,
+    "colorway": "Pantone",
+    "imgUrl": "https://images.stockx.com/360/Air-Jordan-7-Retro-Pantone/Images/Air-Jordan-7-Retro-Pantone/Lv2/img01.jpg?auto=compress&w=480&dpr=2&updated_at=1635269102&h=320&fm=avif&q=60"
+  },
+  {
+    "id": 4,
+    "name": "Air Jordan 13",
+    "price": 200.0,
+    "colorway": "Chutney",
+    "imgUrl": "https://images.stockx.com/360/Air-Jordan-13-Retro-Low-Chutney/Images/Air-Jordan-13-Retro-Low-Chutney/Lv2/img01.jpg?auto=compress&w=480&dpr=2&updated_at=1635174581&h=320&fm=avif&q=60"
+  },
+  {
+    "id": 5,
+    "name": "ASICS GT-2160",
+    "price": 155.0,
+    "colorway": "White Shamrock Green",
+    "imgUrl": "https://images.stockx.com/360/ASICS-GT-2160-White-Shamrock-Green/Images/ASICS-GT-2160-White-Shamrock-Green/Lv2/img01.jpg?auto=compress&w=480&dpr=2&updated_at=1694794885&h=320&fm=avif&q=60"
+  },
+  {
+    "id": 6,
+    "name": "Louis Vuitton Trainer",
+    "price": 796.0,
+    "colorway": "Transparent",
+    "imgUrl": "https://images.stockx.com/images/Louis-Vuitton-Trainer-Transparent.png?fit=fill&bg=FFFFFF&w=480&h=320&auto=compress&dpr=2&trim=color&updated_at=1619142876&fm=avif&q=60"
+  },
+  {
+    "id": 7,
+    "name": "New Balance 2002r",
+    "price": 129.0,
+    "colorway": "Protection Pack Rain Cloud",
+    "imgUrl": "https://images.stockx.com/360/New-Balance-M2002-Protection-Pack-Rain-Cloud/Images/New-Balance-M2002-Protection-Pack-Rain-Cloud/Lv2/img01.jpg?auto=compress&w=480&dpr=2&updated_at=1641985992&h=320&fm=avif&q=60"
+  }
+]
+

@@ -1,0 +1,46 @@
+{
+  "name": "react-e-commerce-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview --mode production"
+  },
+  "dependencies": {
+    "@loadable/component": "^5.16.3",
+    "@react-three/drei": "^9.102.6",
+    "@react-three/fiber": "^8.15.19",
+    "axios": "^1.7.7",
+    "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "firebase": "^10.8.0",
+    "ioredis": "^5.4.1",
+    "ldrs": "^1.0.1",
+    "mdb-react-ui-kit": "^7.2.0",
+    "mongoose": "^8.7.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.1",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.0.1",
+    "react-lazy-load-image-component": "^1.6.0",
+    "react-router-dom": "^6.22.3",
+    "react-toastify": "^10.0.5",
+    "three": "^0.162.0",
+    "vite-plugin-env-compatible": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "vite": "^5.1.6"
+  },
+  "proxy": "http://localhost:5000"
+}
