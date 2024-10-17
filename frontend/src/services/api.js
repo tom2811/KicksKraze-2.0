@@ -2,10 +2,10 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api';
 
-export const getAllSneakers = async (page = 1, limit = 12, brand = '') => {
+export const getAllSneakers = async (page = 1, limit = 12, brands = '') => {
   try {
     const response = await axios.get(`${API_URL}/sneakers`, {
-      params: { page, limit, brand }
+      params: { page, limit, brands }
     });
     return response.data;
   } catch (error) {

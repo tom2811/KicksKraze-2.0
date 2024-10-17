@@ -74,13 +74,12 @@ export const mobileLoginButtonStyle = {
 export const mobileLogoutButtonStyle = {
   color: DIM_COLOR,
   backgroundColor: 'transparent',
-  padding: '10px 0',
-  width: '100%',
   textAlign: 'center',
-  fontSize: 'inherit',
-  fontWeight: 'inherit',
   cursor: 'pointer',
   transition: 'background-color 0.2s',
+  padding: '10px 0',
+  width: '100%',
+  border: 'none',
   '&:hover': {
     backgroundColor: 'rgba(0, 0, 0, 0.05)'
   }

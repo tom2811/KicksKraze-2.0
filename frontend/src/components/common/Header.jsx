@@ -38,29 +38,45 @@ function Header() {
 
   return (
     <header className="bg-white shadow-md transition-all duration-300">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-6 py-3 sm:px-4 sm:py-2 md:px-3 md:py-3">
         <Flex justify="between" align="center">
-          <Logo className="text-2xl font-doodle cursor-default">KicksKraze</Logo>
+          <Logo className="text-base sm:text-lg md:text-xl font-doodle cursor-default">KicksKraze</Logo>
 
           {/* Search Bar (visible only on desktop) */}
-          <Flex align="center" className="flex-grow mx-8 max-w-2xl hidden md:flex">
-            <SearchBar />
+          <Flex align="center" className="flex-grow mx-4 md:mx-6 max-w-2xl hidden md:flex">
+            <SearchBar 
+              inputClassName="text-[10px] sm:text-xs md:text-xs lg:text-sm" 
+              placeholderClassName="text-[10px] sm:text-xs md:text-xs lg:text-sm"
+            />
           </Flex>
 
           {/* Navigation and User Actions (desktop) */}
-          <Flex align="center" gap="6" className="hidden md:flex">
-            <AnimatedLink to="/" dimColor={DIM_COLOR} isActive={location.pathname === '/'}>Home</AnimatedLink>
-            <AnimatedLink to="/store" dimColor={DIM_COLOR} isActive={location.pathname === '/store'}>Store</AnimatedLink>
+          <Flex align="center" gap="3" className="hidden md:flex">
+            <AnimatedLink to="/" dimColor={DIM_COLOR} isActive={location.pathname === '/'} className="text-xs sm:text-sm md:text-sm lg:text-base lg:mr-4">Home</AnimatedLink>
+            <AnimatedLink to="/store" dimColor={DIM_COLOR} isActive={location.pathname === '/store'} className="text-xs sm:text-sm md:text-sm lg:text-base lg:mr-4">Store</AnimatedLink>
             {currentUser ? (
               <>
-                <Link to="/cart" style={{ color: DIM_COLOR }}>
-                  <FaShoppingCart size={24} />
+                <Link to="/cart" style={{ color: DIM_COLOR }} className="lg:mr-4">
+                  <FaShoppingCart size={16} className="sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
                 </Link>
-                <Button onClick={logout} size="2" style={dimButtonStyle}>Logout</Button>
+                <Button 
+                  onClick={logout} 
+                  size="1" 
+                  style={dimButtonStyle}
+                  className="text-xs sm:text-sm md:text-sm lg:text-base px-2 py-1 md:px-3 md:py-1 lg:px-4 lg:py-2"
+                >
+                  Logout
+                </Button>
               </>
             ) : (
               <Link to="/login">
-                <Button size="2" style={dimButtonStyle}>Login</Button>
+                <Button 
+                  size="1" 
+                  style={dimButtonStyle}
+                  className="text-xs sm:text-sm md:text-sm lg:text-base px-2 py-1 md:px-3 md:py-1 lg:px-4 lg:py-2"
+                >
+                  Login
+                </Button>
               </Link>
             )}
           </Flex>
@@ -69,15 +85,17 @@ function Header() {
           <Flex align="center" gap="4" className="md:hidden">
             {currentUser ? (
               <Link to="/cart" style={{ color: DIM_COLOR }}>
-                <FaShoppingCart size={24} />
+                <FaShoppingCart size={20} />
               </Link>
             ) : (
-              <Link to="/login" style={{ width: '100%' }}>
-                <Button size="2" style={mobileLoginButtonStyle}>Login</Button>
+              <Link to="/login">
+                <Button size="1" style={mobileLoginButtonStyle} className="text-xs sm:text-sm px-3 py-1">
+                  Login
+                </Button>
               </Link>
             )}
-            <Button onClick={toggleMenu} variant="ghost" style={{ color: DIM_COLOR }}>
-              {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            <Button onClick={toggleMenu} variant="ghost" style={{ color: DIM_COLOR }} className="p-1">
+              {isMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
             </Button>
           </Flex>
         </Flex>
@@ -85,12 +103,23 @@ function Header() {
 
       {/* Mobile menu */}
       <MobileMenu isOpen={isMenuOpen} className="md:hidden bg-white">
-        <Flex direction="column" align="center" gap="2" className="px-4 py-4">
-          <SearchBar className="mb-2" />
-          <MobileMenuLink to="/" dimColor={DIM_COLOR} isActive={location.pathname === '/'}>Home</MobileMenuLink>
-          <MobileMenuLink to="/store" dimColor={DIM_COLOR} isActive={location.pathname === '/store'}>Store</MobileMenuLink>
+        <Flex direction="column" align="center" gap="2" className="px-4 py-2">
+          <SearchBar 
+            className="mb-2" 
+            inputClassName="text-[10px] sm:text-xs" 
+            placeholderClassName="text-[10px] sm:text-xs"
+          />
+          <MobileMenuLink to="/" dimColor={DIM_COLOR} isActive={location.pathname === '/'} className="text-xs sm:text-sm">Home</MobileMenuLink>
+          <MobileMenuLink to="/store" dimColor={DIM_COLOR} isActive={location.pathname === '/store'} className="text-xs sm:text-sm">Store</MobileMenuLink>
           {currentUser && (
-            <Button onClick={logout} style={mobileLogoutButtonStyle}>Logout</Button>
+            <Button 
+              onClick={logout} 
+              size="1" 
+              style={mobileLogoutButtonStyle}
+              className="text-xs sm:text-sm font-normal px-3 py-1"
+            >
+              Logout
+            </Button>
           )}
         </Flex>
       </MobileMenu>

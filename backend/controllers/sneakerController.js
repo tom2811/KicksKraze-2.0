@@ -5,23 +5,18 @@ exports.getAllSneakers = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
-    const brand = req.query.brand;
+    const brands = req.query.brands ? req.query.brands.split(',') : [];
 
-    const query = brand ? { brand } : {};
-    const skip = (page - 1) * limit;
+    let query = brands.length > 0 ? { brand: { $in: brands } } : {};
 
-    const [sneakers, total] = await Promise.all([
-      Sneaker.find(query).skip(skip).limit(limit),
-      Sneaker.countDocuments(query)
-    ]);
-
-    const totalPages = Math.ceil(total / limit);
+    const totalSneakers = await Sneaker.countDocuments(query);
+    const sneakers = await Sneaker.find(query).skip((page - 1) * limit).limit(limit).lean();
 
     res.json({
       sneakers,
       currentPage: page,
-      totalPages,
-      totalItems: total
+      totalPages: Math.ceil(totalSneakers / limit),
+      totalSneakers
     });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -44,7 +39,14 @@ exports.getSneakerById = async (req, res) => {
 exports.getBrands = async (req, res) => {
   try {
     const brands = await Sneaker.distinct('brand');
-    res.json(brands);
+    const counts = await Sneaker.aggregate([
+      { $group: { _id: '$brand', count: { $sum: 1 } } }
+    ]);
+    const brandCounts = counts.reduce((acc, { _id, count }) => {
+      acc[_id] = count;
+      return acc;
+    }, {});
+    res.json({ brands, counts: brandCounts });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
