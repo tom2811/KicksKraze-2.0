@@ -5,19 +5,23 @@ exports.getAllSneakers = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
-    const brand = req.query.brand || '';
+    const brand = req.query.brand;
+
+    const query = brand ? { brand } : {};
     const skip = (page - 1) * limit;
 
-    let query = brand ? { brand } : {};
+    const [sneakers, total] = await Promise.all([
+      Sneaker.find(query).skip(skip).limit(limit),
+      Sneaker.countDocuments(query)
+    ]);
 
-    const totalSneakers = await Sneaker.countDocuments(query);
-    const sneakers = await Sneaker.find(query).skip(skip).limit(limit).lean();
+    const totalPages = Math.ceil(total / limit);
 
     res.json({
       sneakers,
       currentPage: page,
-      totalPages: Math.ceil(totalSneakers / limit),
-      totalSneakers
+      totalPages,
+      totalItems: total
     });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -27,8 +31,7 @@ exports.getAllSneakers = async (req, res) => {
 // Get single sneaker by ID
 exports.getSneakerById = async (req, res) => {
   try {
-    const sneakerId = parseInt(req.params.id);
-    const sneaker = await Sneaker.findOne({ id: sneakerId }).select('-_id id name price colorway imgUrl');
+    const sneaker = await Sneaker.findById(req.params.id);
     if (!sneaker) {
       return res.status(404).json({ message: 'Sneaker not found' });
     }

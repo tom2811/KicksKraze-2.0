@@ -1,14 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Login from './components/Login';
-import Register from './components/Register';
-import Home from './pages/Home';
-import Store from './pages/Store';
-import { Theme } from '@radix-ui/themes';
-import '@radix-ui/themes/styles.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Store from "./pages/Store";
+import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
 
 function App() {
   return (

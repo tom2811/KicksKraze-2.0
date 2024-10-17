@@ -1,122 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
-import { Flex, Button, TextField } from '@radix-ui/themes';
-import { FaBars, FaTimes, FaShoppingCart, FaSearch } from 'react-icons/fa';
-import styled from 'styled-components';
-import { useAuth } from '../contexts/AuthContext';
-
-// Constants
-const DIM_COLOR = '#4A4A4A';
-
-// Styled Components
-const AnimatedLink = styled(Link)`
-  color: ${props => props.dimColor};
-  text-decoration: none;
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: -4px;
-    left: 0;
-    background-color: ${props => props.dimColor};
-    transform: scaleX(${props => props.isActive ? 1 : 0});
-    transform-origin: bottom left;
-    transition: transform 0.3s ease-out;
-  }
-`;
-
-const MobileMenu = styled.nav`
-  max-height: ${props => props.isOpen ? '300px' : '0'};
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-`;
-
-const MobileMenuLink = styled(Link)`
-  color: ${props => props.dimColor};
-  text-decoration: none;
-  text-align: center;
-  padding: 10px 0;
-  width: 100%;
-  transition: background-color 0.2s;
-
-  ${props => props.isActive && `
-    background-color: rgba(0, 0, 0, 0.05);
-  `}
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-`;
-
-const Logo = styled.span`
-  color: #000;
-  -webkit-text-stroke: 1px #000;
-  letter-spacing: -0.03em;
-`;
-
-// Styles
-const dimButtonStyle = {
-  color: DIM_COLOR,
-  backgroundColor: 'white',
-  padding: '0.5rem 1rem',
-  borderRadius: '0.25rem',
-  cursor: 'pointer',
-  transition: 'outline 0.2s',
-  outline: `1px solid ${DIM_COLOR}`,
-  '&:hover': {
-    outline: `2px solid ${DIM_COLOR}`
-  }
-};
-
-const mobileLoginButtonStyle = {
-  ...dimButtonStyle,
-  width: '100%',
-  outline: `1px solid ${DIM_COLOR}`,
-  transition: 'background-color 0.2s',
-  '&:hover': {
-    backgroundColor: 'rgba(0, 0, 0, 0.05)'
-  }
-};
-
-const mobileLogoutButtonStyle = {
-  color: DIM_COLOR,
-  backgroundColor: 'transparent',
-  padding: '10px 0',
-  width: '100%',
-  textAlign: 'center',
-  fontSize: 'inherit',
-  fontWeight: 'inherit',
-  cursor: 'pointer',
-  transition: 'background-color 0.2s',
-  '&:hover': {
-    backgroundColor: 'rgba(0, 0, 0, 0.05)'
-  }
-};
-
-// Components
-const SearchBar = ({ className, style }) => (
-  <TextField.Root className={`w-full ${className}`}>
-    <TextField.Input 
-      placeholder="Find your favorite kicks..." 
-      className="pr-10 py-3 text-sm font-semibold font-sans" 
-      style={{ 
-        paddingLeft: '0.5rem',
-        borderRadius: '0.5rem',
-        ...style
-      }}
-    />
-    <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-  </TextField.Root>
-);
-
-SearchBar.propTypes = {
-  className: PropTypes.string,
-  style: PropTypes.object
-};
+import { Flex, Button } from '@radix-ui/themes';
+import { FaBars, FaTimes, FaShoppingCart } from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
+import SearchBar from './SearchBar';
+import {
+  DIM_COLOR,
+  AnimatedLink,
+  MobileMenu,
+  MobileMenuLink,
+  Logo,
+  dimButtonStyle,
+  mobileLoginButtonStyle,
+  mobileLogoutButtonStyle
+} from './HeaderStyles';
 
 function Header() {
   const { currentUser, logout } = useAuth();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getAllSneakers, getBrands } from '../utils/api';
+import { getAllSneakers, getBrands } from '../services/api';
 import SneakerCard from '../components/SneakerCard';
-import { Container, Heading, Flex, Box, Button, Grid } from '@radix-ui/themes';
+import { Container, Flex, Box, Button, Grid } from '@radix-ui/themes';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 function Store() {
