@@ -1,24 +1,36 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Card, Flex, Box, Text, Button } from '@radix-ui/themes';
+import { useAuth } from '../contexts/AuthContext';
 
-function SneakerCard({ sneaker, canPurchase }) {
+function SneakerCard({ sneaker, onAddToCart }) {
+  const { currentUser } = useAuth();
+
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden">
-      <img src={sneaker.imgUrl} alt={sneaker.name} className="w-full h-48 sm:h-64 object-cover" />
-      <div className="p-4">
-        <h3 className="text-lg sm:text-xl font-semibold mb-2">{sneaker.name}</h3>
-        <p className="text-sm sm:text-base text-gray-600 mb-2">{sneaker.colorway}</p>
-        <p className="text-lg sm:text-xl font-bold mb-4">${sneaker.price}</p>
-        <Link 
-          to={`/sneaker/${sneaker.id}`} 
-          className={`block w-full text-center px-4 py-2 rounded ${canPurchase 
-            ? 'bg-blue-600 text-white hover:bg-blue-700' 
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'} transition duration-300`}
-        >
-          {canPurchase ? 'View Details' : 'Log in to View'}
-        </Link>
-      </div>
-    </div>
+    <Card className="overflow-hidden shadow-sm">
+      <Box className="relative pb-[100%] bg-white">
+        <img 
+          src={sneaker.imgUrl} 
+          alt={sneaker.name} 
+          className="absolute top-0 left-0 w-full h-full object-contain p-4"
+        />
+      </Box>
+      <Box className="p-4 bg-white">
+        <Flex direction="column" gap="2">
+          <Text size="1" weight="bold" className="text-gray-500 uppercase tracking-wide">{sneaker.brand}</Text>
+          <Text as="h3" size="3" weight="bold" className="line-clamp-2">{sneaker.name}</Text>
+          <Text size="2" className="text-gray-600">{sneaker.colorway}</Text>
+          <Text size="5" weight="bold" className="text-blue-600">${sneaker.price}</Text>
+          <Button 
+            onClick={() => onAddToCart(sneaker)} 
+            size="3"
+            className="mt-2 w-full"
+            disabled={!currentUser}
+          >
+            {currentUser ? 'Add to Cart' : 'Login to Purchase'}
+          </Button>
+        </Flex>
+      </Box>
+    </Card>
   );
 }
 

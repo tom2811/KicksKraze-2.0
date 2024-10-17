@@ -3,12 +3,23 @@ const Sneaker = require('../models/Sneaker');
 // Get all sneakers
 exports.getAllSneakers = async (req, res) => {
   try {
-    console.log('Attempting to fetch sneakers from database...');
-    const sneakers = await Sneaker.find().lean();
-    console.log(`Found ${sneakers.length} sneakers:`, sneakers);
-    res.json(sneakers);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const brand = req.query.brand || '';
+    const skip = (page - 1) * limit;
+
+    let query = brand ? { brand } : {};
+
+    const totalSneakers = await Sneaker.countDocuments(query);
+    const sneakers = await Sneaker.find(query).skip(skip).limit(limit).lean();
+
+    res.json({
+      sneakers,
+      currentPage: page,
+      totalPages: Math.ceil(totalSneakers / limit),
+      totalSneakers
+    });
   } catch (error) {
-    console.error('Error in getAllSneakers:', error);
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
@@ -23,7 +34,15 @@ exports.getSneakerById = async (req, res) => {
     }
     res.json(sneaker);
   } catch (error) {
-    console.error('Error in getSneakerById:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+exports.getBrands = async (req, res) => {
+  try {
+    const brands = await Sneaker.distinct('brand');
+    res.json(brands);
+  } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };

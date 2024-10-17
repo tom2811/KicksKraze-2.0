@@ -14,11 +14,10 @@ const connectWithRetry = async () => {
       await mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        dbName: 'kickskraze' // Specify the database name here
+        dbName: 'kickskraze'
       });
       console.log('MongoDB connected successfully');
       console.log('Connected to database:', mongoose.connection.db.databaseName);
-      console.log('Available collections:', await mongoose.connection.db.listCollections().toArray());
       return;
     } catch (err) {
       console.error(`Connection attempt ${i + 1} failed:`, err);
