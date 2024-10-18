@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Flex, Button } from '@radix-ui/themes';
+import { Flex } from '@radix-ui/themes';
 import { FaBars, FaTimes, FaShoppingCart } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
 import SearchBar from './SearchBar';
@@ -10,9 +10,8 @@ import {
   MobileMenu,
   MobileMenuLink,
   Logo,
-  dimButtonStyle,
-  mobileLoginButtonStyle,
-  mobileLogoutButtonStyle
+  FancyButton,
+  MobileFancyButton
 } from './HeaderStyles';
 
 function Header() {
@@ -59,24 +58,15 @@ function Header() {
                 <Link to="/cart" style={{ color: DIM_COLOR }} className="lg:mr-4">
                   <FaShoppingCart size={16} className="sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
                 </Link>
-                <Button 
-                  onClick={logout} 
-                  size="1" 
-                  style={dimButtonStyle}
-                  className="text-xs sm:text-sm md:text-sm lg:text-base px-2 py-1 md:px-3 md:py-1 lg:px-4 lg:py-2"
-                >
+                <FancyButton onClick={logout}>
                   Logout
-                </Button>
+                </FancyButton>
               </>
             ) : (
               <Link to="/login">
-                <Button 
-                  size="1" 
-                  style={dimButtonStyle}
-                  className="text-xs sm:text-sm md:text-sm lg:text-base px-2 py-1 md:px-3 md:py-1 lg:px-4 lg:py-2"
-                >
+                <FancyButton>
                   Login
-                </Button>
+                </FancyButton>
               </Link>
             )}
           </Flex>
@@ -89,14 +79,14 @@ function Header() {
               </Link>
             ) : (
               <Link to="/login">
-                <Button size="1" style={mobileLoginButtonStyle} className="text-xs sm:text-sm px-3 py-1">
+                <MobileFancyButton>
                   Login
-                </Button>
+                </MobileFancyButton>
               </Link>
             )}
-            <Button onClick={toggleMenu} variant="ghost" style={{ color: DIM_COLOR }} className="p-1">
+            <button onClick={toggleMenu} className="text-dim-color p-1">
               {isMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-            </Button>
+            </button>
           </Flex>
         </Flex>
       </div>
@@ -112,14 +102,14 @@ function Header() {
           <MobileMenuLink to="/" dimColor={DIM_COLOR} isActive={location.pathname === '/'} className="text-xs sm:text-sm">Home</MobileMenuLink>
           <MobileMenuLink to="/store" dimColor={DIM_COLOR} isActive={location.pathname === '/store'} className="text-xs sm:text-sm">Store</MobileMenuLink>
           {currentUser && (
-            <Button 
+            <MobileMenuLink 
+              as="button"
               onClick={logout} 
-              size="1" 
-              style={mobileLogoutButtonStyle}
-              className="text-xs sm:text-sm font-normal px-3 py-1"
+              dimColor={DIM_COLOR}
+              className="text-xs sm:text-sm w-full mb-2"
             >
               Logout
-            </Button>
+            </MobileMenuLink>
           )}
         </Flex>
       </MobileMenu>

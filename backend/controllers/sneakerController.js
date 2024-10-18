@@ -6,11 +6,23 @@ exports.getAllSneakers = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const brands = req.query.brands ? req.query.brands.split(',') : [];
+    const sortOrder = req.query.sortOrder || 'default';
 
     let query = brands.length > 0 ? { brand: { $in: brands } } : {};
+    let sort = {};
+
+    if (sortOrder === 'highToLow') {
+      sort = { price: -1 };
+    } else if (sortOrder === 'lowToHigh') {
+      sort = { price: 1 };
+    }
 
     const totalSneakers = await Sneaker.countDocuments(query);
-    const sneakers = await Sneaker.find(query).skip((page - 1) * limit).limit(limit).lean();
+    const sneakers = await Sneaker.find(query)
+      .sort(sort)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean();
 
     res.json({
       sneakers,

@@ -29,11 +29,11 @@ function Store() {
 
   const itemsPerPage = 12;
 
-  // Fetch sneakers based on current page and selected brands
+  // Fetch sneakers based on current page, selected brands, and sort order
   const fetchSneakers = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await getAllSneakers(currentPage, itemsPerPage, selectedBrands.join(','));
+      const data = await getAllSneakers(currentPage, itemsPerPage, selectedBrands.join(','), sortOrder);
       setSneakers(data.sneakers);
       setTotalPages(data.totalPages);
       setTotalSneakers(data.totalSneakers);
@@ -42,7 +42,7 @@ function Store() {
       setError('Failed to fetch sneakers. Please try again later.');
       setLoading(false);
     }
-  }, [currentPage, selectedBrands]);
+  }, [currentPage, selectedBrands, sortOrder]);
 
   // Fetch brands on component mount
   useEffect(() => {
@@ -84,19 +84,7 @@ function Store() {
   // Handle sort order change
   const handleSortChange = (value) => {
     setSortOrder(value);
-    if (value === 'default') {
-      fetchSneakers();
-    } else {
-      const sortedSneakers = [...sneakers].sort((a, b) => {
-        if (value === 'highToLow') {
-          return b.price - a.price;
-        } else if (value === 'lowToHigh') {
-          return a.price - b.price;
-        }
-        return 0;
-      });
-      setSneakers(sortedSneakers);
-    }
+    setCurrentPage(1); // Reset to first page when sorting changes
   };
 
   // Toggle filter menu on mobile
@@ -180,15 +168,15 @@ function Store() {
               )}
             </Flex>
             {/* Sort dropdown */}
-            <Select.Root defaultValue="default" onValueChange={handleSortChange}>
+            <Select.Root value={sortOrder} onValueChange={handleSortChange}>
               <Select.Trigger 
                 color="cyan" 
-                className="cursor-pointer text-[10px] sm:text-xs md:text-xs lg:text-sm" 
-                size="1"
+                className="cursor-pointer text-xs sm:text-xs md:text-xs lg:text-sm" 
+                size={{ initial: '2', md: '1' }}
               />
               <Select.Content 
                 color="cyan" 
-                className="text-[10px] sm:text-xs md:text-xs lg:text-sm"
+                className="text-xs sm:text-xs md:text-xs lg:text-sm"
               >
                 <Select.Item value="default" className="cursor-pointer">Sort: Featured</Select.Item>
                 <Select.Item value="highToLow" className="cursor-pointer">Price: High to Low</Select.Item>
@@ -209,7 +197,7 @@ function Store() {
           </Grid>
 
           {/* Pagination */}
-          <Flex justify="center" mt="3">
+          <Flex justify="center" mt="5">
             <Flex align="center" gap="2">
               <Button 
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
