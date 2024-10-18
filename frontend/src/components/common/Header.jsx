@@ -44,6 +44,7 @@ function Header() {
           {/* Search Bar (visible only on desktop) */}
           <Flex align="center" className="flex-grow mx-4 md:mx-6 max-w-2xl hidden md:flex">
             <SearchBar 
+              className="w-full"
               inputClassName="text-[10px] sm:text-xs md:text-xs lg:text-sm" 
               placeholderClassName="text-[10px] sm:text-xs md:text-xs lg:text-sm"
             />
@@ -51,8 +52,8 @@ function Header() {
 
           {/* Navigation and User Actions (desktop) */}
           <Flex align="center" gap="3" className="hidden md:flex">
-            <AnimatedLink to="/" dimColor={DIM_COLOR} isActive={location.pathname === '/'} className="text-xs sm:text-sm md:text-sm lg:text-base lg:mr-4">Home</AnimatedLink>
-            <AnimatedLink to="/store" dimColor={DIM_COLOR} isActive={location.pathname === '/store'} className="text-xs sm:text-sm md:text-sm lg:text-base lg:mr-4">Store</AnimatedLink>
+            <AnimatedLink to="/" $dimColor={DIM_COLOR} $isActive={location.pathname === '/'} className="text-xs sm:text-sm md:text-sm lg:text-base lg:mr-4">Home</AnimatedLink>
+            <AnimatedLink to="/store" $dimColor={DIM_COLOR} $isActive={location.pathname === '/store'} className="text-xs sm:text-sm md:text-sm lg:text-base lg:mr-4">Store</AnimatedLink>
             {currentUser ? (
               <>
                 <Link to="/cart" style={{ color: DIM_COLOR }} className="lg:mr-4">
@@ -72,9 +73,9 @@ function Header() {
           </Flex>
 
           {/* Mobile actions */}
-          <Flex align="center" gap="4" className="md:hidden">
+          <Flex align="center" gap="2" className="md:hidden">
             {currentUser ? (
-              <Link to="/cart" style={{ color: DIM_COLOR }}>
+              <Link to="/cart" className="pr-2" style={{ color: DIM_COLOR }}>
                 <FaShoppingCart size={20} />
               </Link>
             ) : (
@@ -92,20 +93,20 @@ function Header() {
       </div>
 
       {/* Mobile menu */}
-      <MobileMenu isOpen={isMenuOpen} className="md:hidden bg-white">
+      <MobileMenu $isOpen={isMenuOpen} className="md:hidden bg-white">
         <Flex direction="column" align="center" gap="2" className="px-4 py-2">
           <SearchBar 
             className="mb-2" 
             inputClassName="text-[10px] sm:text-xs" 
             placeholderClassName="text-[10px] sm:text-xs"
           />
-          <MobileMenuLink to="/" dimColor={DIM_COLOR} isActive={location.pathname === '/'} className="text-xs sm:text-sm">Home</MobileMenuLink>
-          <MobileMenuLink to="/store" dimColor={DIM_COLOR} isActive={location.pathname === '/store'} className="text-xs sm:text-sm">Store</MobileMenuLink>
+          <MobileMenuLink to="/" $dimColor={DIM_COLOR} $isActive={location.pathname === '/'} className="text-xs sm:text-sm">Home</MobileMenuLink>
+          <MobileMenuLink to="/store" $dimColor={DIM_COLOR} $isActive={location.pathname === '/store'} className="text-xs sm:text-sm">Store</MobileMenuLink>
           {currentUser && (
             <MobileMenuLink 
               as="button"
               onClick={logout} 
-              dimColor={DIM_COLOR}
+              $dimColor={DIM_COLOR}
               className="text-xs sm:text-sm w-full mb-2"
             >
               Logout

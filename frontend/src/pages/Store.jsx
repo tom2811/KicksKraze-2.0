@@ -8,7 +8,7 @@ import styled from 'styled-components';
 // Styled component for the filter menu
 const FilterMenu = styled.div`
   @media (max-width: 767px) {
-    max-height: ${props => props.isOpen ? '300px' : '0'};
+    max-height: ${props => props.$isOpen ? '300px' : '0'};
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
     padding-left: 1rem;
@@ -118,7 +118,7 @@ function Store() {
           {/* Desktop Filter Header */}
           <Heading size={{ initial: '1', sm: '2', lg: '3' }} mb="2" mt="1" className="text-gray-600 hidden sm:block">Filter Items</Heading>
           {/* Filter Menu */}
-          <FilterMenu isOpen={isFilterOpen}>
+          <FilterMenu $isOpen={isFilterOpen}>
             <Flex direction="column" gap="1" className="sm:pl-0">
               {/* All Items Checkbox */}
               <Flex align="center" className="cursor-pointer hover:bg-gray-100 rounded-md p-1">

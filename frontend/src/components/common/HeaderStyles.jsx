@@ -5,7 +5,7 @@ export const DIM_COLOR = '#4A4A4A';
 export const ACCENT_COLOR = 'hsl(192 91% 36%)';
 
 export const AnimatedLink = styled(Link)`
-  color: ${props => props.dimColor};
+  color: ${props => props.$dimColor};
   text-decoration: none;
   position: relative;
   &::after {
@@ -15,27 +15,27 @@ export const AnimatedLink = styled(Link)`
     height: 2px;
     bottom: -4px;
     left: 0;
-    background-color: ${ACCENT_COLOR}; // Changed to ACCENT_COLOR (cyan)
-    transform: scaleX(${props => props.isActive ? 1 : 0});
+    background-color: ${ACCENT_COLOR};
+    transform: scaleX(${props => props.$isActive ? 1 : 0});
     transform-origin: bottom left;
     transition: transform 0.3s ease-out;
   }
 `;
 
 export const MobileMenu = styled.nav`
-  max-height: ${props => props.isOpen ? '300px' : '0'};
+  max-height: ${props => props.$isOpen ? '300px' : '0'};
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
 `;
 
 export const MobileMenuLink = styled(Link)`
-  color: ${props => props.dimColor};
+  color: ${props => props.$dimColor};
   text-decoration: none;
   text-align: center;
   padding: 10px 0;
   width: 100%;
   transition: background-color 0.2s;
-  ${props => props.isActive && `
+  ${props => props.$isActive && `
     background-color: rgba(0, 0, 0, 0.05);
   `}
   &:hover {

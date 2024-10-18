@@ -2,31 +2,44 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TextField } from '@radix-ui/themes';
 import { FaSearch } from 'react-icons/fa';
+import styled from 'styled-components';
+
+const StyledTextField = styled(TextField.Root)`
+  width: 100%;
+  ${props => props.className}
+`;
+
+const StyledInput = styled(TextField.Input)`
+  padding-right: 2.5rem;
+  padding-left: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: inherit;
+
+  &::placeholder {
+    ${props => props.$placeholderClassName}
+  }
+`;
+
+const SearchIcon = styled(FaSearch)`
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 0.75rem;
+`;
 
 const SearchBar = ({ className, style, inputClassName, placeholderClassName }) => (
-  <TextField.Root className={`w-full ${className}`}>
-    {/* Search Input */}
-    <TextField.Input 
+  <StyledTextField className={className} style={style}>
+    <StyledInput 
       placeholder="Find your favorite kicks..." 
-      className={`pr-10 py-2 font-normal font-sans ${inputClassName}`}
-      style={{ 
-        paddingLeft: '0.5rem',
-        borderRadius: '0.5rem',
-        ...style
-      }}
+      className={inputClassName}
+      $placeholderClassName={placeholderClassName}
     />
-    
-    {/* Search Icon */}
-    <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs" />
-    
-    {/* Placeholder Styling */}
-    <style jsx>{`
-      ::placeholder {
-        font-size: inherit;
-        ${placeholderClassName}
-      }
-    `}</style>
-  </TextField.Root>
+    <TextField.Slot>
+      <SearchIcon />
+    </TextField.Slot>
+  </StyledTextField>
 );
 
 SearchBar.propTypes = {
