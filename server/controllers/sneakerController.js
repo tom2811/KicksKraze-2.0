@@ -1,21 +1,41 @@
 const Sneaker = require('../models/Sneaker');
 
+// Helper function to parse query parameters
+const parseQueryParams = (query) => {
+  return {
+    page: parseInt(query.page) || 1,
+    limit: parseInt(query.limit) || 12,
+    brands: query.brands ? query.brands.split(',') : [],
+    sortOrder: query.sortOrder || 'default',
+    searchQuery: query.search || ''
+  };
+};
+
+// Helper function to build MongoDB query
+const buildMongoQuery = (brands, searchQuery) => {
+  let query = {};
+  if (brands.length > 0) {
+    query.brand = { $in: brands };
+  }
+  if (searchQuery) {
+    query.name = { $regex: searchQuery, $options: 'i' };
+  }
+  return query;
+};
+
+// Helper function to determine sort order
+const getSortOrder = (sortOrder) => {
+  if (sortOrder === 'highToLow') return { price: -1 };
+  if (sortOrder === 'lowToHigh') return { price: 1 };
+  return {};
+};
+
 // Get all sneakers
 exports.getAllSneakers = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
-    const brands = req.query.brands ? req.query.brands.split(',') : [];
-    const sortOrder = req.query.sortOrder || 'default';
-
-    let query = brands.length > 0 ? { brand: { $in: brands } } : {};
-    let sort = {};
-
-    if (sortOrder === 'highToLow') {
-      sort = { price: -1 };
-    } else if (sortOrder === 'lowToHigh') {
-      sort = { price: 1 };
-    }
+    const { page, limit, brands, sortOrder, searchQuery } = parseQueryParams(req.query);
+    const query = buildMongoQuery(brands, searchQuery);
+    const sort = getSortOrder(sortOrder);
 
     const totalSneakers = await Sneaker.countDocuments(query);
     const sneakers = await Sneaker.find(query)
@@ -31,6 +51,7 @@ exports.getAllSneakers = async (req, res) => {
       totalSneakers
     });
   } catch (error) {
+    console.error("Server error:", error);
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
@@ -48,6 +69,7 @@ exports.getSneakerById = async (req, res) => {
   }
 };
 
+// Get all brands and their counts
 exports.getBrands = async (req, res) => {
   try {
     const brands = await Sneaker.distinct('brand');

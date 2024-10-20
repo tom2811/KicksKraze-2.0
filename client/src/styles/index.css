@@ -1,4 +1,51 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
+:root {
+  --accent-color: hsl(192 91% 36%);
+}
+
+/* Custom TextField Styles */
+.custom-textfield .rt-TextFieldInput,
+.custom-textfield .rt-TextFieldInput:focus {
+  border: 1px solid #d1d5db !important;
+  box-shadow: none !important;
+}
+
+.custom-textfield .rt-TextFieldChrome {
+  --border-color: transparent !important;
+  --border-color-focus: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Custom Searchbar Styles */
+.custom-searchbar input,
+.custom-searchbar input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.375rem !important;
+}
+
+.custom-searchbar input.rounded-b-none {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* Dropdown Styles */
+.custom-searchbar .absolute > div {
+  padding-left: 16px;
+}
+
+.custom-searchbar .absolute > div:hover,
+.custom-searchbar .absolute > div.bg-accent,
+.bg-accent,
+.hover\:bg-accent:hover {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.dropdown-item {
+  padding-left: 12px !important;
+}

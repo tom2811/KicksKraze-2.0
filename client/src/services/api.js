@@ -1,25 +1,43 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-export const getAllSneakers = async (page, limit, brands, sortOrder) => {
+export const getAllSneakers = async (page, limit, brands, sortOrder, searchQuery = '') => {
   try {
     const response = await axios.get(`${API_URL}/sneakers`, {
-      params: { page, limit, brands, sortOrder }
+      params: { page, limit, brands, sortOrder, search: searchQuery }
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching sneakers:', error);
+    throw error;
+  }
+};
+
+export const getSneakerById = async (id) => {
+  try {
+    const response = await axios.get(`${API_URL}/sneakers/${id}`);
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };
 
 export const getBrands = async () => {
   try {
-    const response = await axios.get(`${API_URL}/sneakers/brands`);
+    const response = await axios.get(`${API_URL}/brands`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching brands:', error);
+    throw error;
+  }
+};
+
+export const searchSneakers = async (term) => {
+  try {
+    const response = await axios.get(`${API_URL}/sneakers/search`, {
+      params: { term }
+    });
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };

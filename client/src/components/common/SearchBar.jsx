@@ -1,52 +1,176 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { TextField } from '@radix-ui/themes';
-import { FaSearch } from 'react-icons/fa';
-import styled from 'styled-components';
+import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Box, Flex } from "@radix-ui/themes";
+import { FaSearch } from "react-icons/fa";
+import { getAllSneakers } from "../../services/api";
 
-const StyledTextField = styled(TextField.Root)`
-  width: 100%;
-  ${props => props.className}
-`;
+const SearchBar = ({
+  className,
+  style,
+  inputClassName,
+  placeholderClassName,
+}) => {
+  // State for managing search functionality
+  const [searchTerm, setSearchTerm] = useState("");
+  const [matchedItems, setMatchedItems] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
-const StyledInput = styled(TextField.Input)`
-  padding-right: 2.5rem;
-  padding-left: 0.5rem;
-  border-radius: 0.5rem;
-  font-size: inherit;
+  // Hooks for navigation and location
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  &::placeholder {
-    ${props => props.$placeholderClassName}
-  }
-`;
+  // Refs for managing DOM elements
+  const searchRef = useRef(null);
+  const inputRef = useRef(null);
 
-const SearchIcon = styled(FaSearch)`
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #9ca3af;
-  font-size: 0.75rem;
-`;
+  // Effect for fetching matched items based on search term
+  useEffect(() => {
+    const fetchMatchedItems = async () => {
+      if (searchTerm.length > 0) {
+        try {
+          const { sneakers } = await getAllSneakers(1, 100, "", "default", "");
+          const filteredSneakers = sneakers
+            .filter((sneaker) =>
+              sneaker.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .slice(0, 5);
+          setMatchedItems(filteredSneakers);
+          setShowDropdown(true);
+        } catch (error) {
+          console.error("Error fetching matched items:", error);
+        }
+      } else {
+        setMatchedItems([]);
+        setShowDropdown(false);
+      }
+    };
 
-const SearchBar = ({ className, style, inputClassName, placeholderClassName }) => (
-  <StyledTextField className={className} style={style}>
-    <StyledInput 
-      placeholder="Find your favorite kicks..." 
-      className={inputClassName}
-      $placeholderClassName={placeholderClassName}
-    />
-    <TextField.Slot>
-      <SearchIcon />
-    </TextField.Slot>
-  </StyledTextField>
-);
+    // Debounce search to avoid excessive API calls
+    const debounce = setTimeout(fetchMatchedItems, 300);
+    return () => clearTimeout(debounce);
+  }, [searchTerm]);
 
+  // Effect for handling clicks outside the search component
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Handler for input changes
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+    setSelectedIndex(-1);
+  };
+
+  // Handler for selecting an item from the dropdown
+  const handleItemSelection = (sneaker) => {
+    setSearchTerm("");
+    setMatchedItems([]);
+    setShowDropdown(false);
+    navigate(`/store?exactId=${encodeURIComponent(sneaker._id)}`);
+  };
+
+  // Handler for keyboard navigation in the dropdown
+  const handleKeyDown = (e) => {
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev < matchedItems.length - 1 ? prev + 1 : prev));
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (selectedIndex >= 0 && selectedIndex < matchedItems.length) {
+          handleItemSelection(matchedItems[selectedIndex]);
+        } else if (searchTerm.trim()) {
+          handleSearch();
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Handler for initiating a search
+  const handleSearch = () => {
+    if (
+      searchTerm.trim() &&
+      searchTerm !== new URLSearchParams(location.search).get("search")
+    ) {
+      setShowDropdown(false);
+      const currentSort =
+        new URLSearchParams(location.search).get("sort") || "default";
+      const currentBrands =
+        new URLSearchParams(location.search).get("brands") || "";
+      navigate(
+        `/store?search=${encodeURIComponent(
+          searchTerm.trim()
+        )}&sort=${currentSort}&brands=${currentBrands}`,
+        { replace: true }
+      );
+    }
+  };
+
+  // Render the search bar and dropdown
+  return (
+    <Box
+      ref={searchRef}
+      className={`relative z-[9998] w-full ${className}`}
+      style={style}
+    >
+      <Flex align="center" className="relative w-full custom-searchbar">
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Find your favorite kicks..."
+          className={`w-full pr-10 pl-3 py-2 rounded-md border border-gray-300 focus:outline-none text-sm ${
+            showDropdown && matchedItems.length > 0 ? "rounded-b-none" : ""
+          } ${inputClassName}`}
+          value={searchTerm}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+        />
+        <FaSearch
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors duration-200"
+          onClick={handleSearch}
+        />
+      </Flex>
+      {showDropdown && matchedItems.length > 0 && (
+        <Box className="absolute top-full left-0 right-0 bg-white border border-gray-300 border-t-0 rounded-b-md shadow-md z-[9999] max-h-[300px] overflow-y-auto">
+          {matchedItems.map((sneaker, index) => (
+            <Box 
+              key={sneaker._id} 
+              onClick={() => handleItemSelection(sneaker)}
+              className={`py-2 cursor-pointer text-sm hover:bg-accent hover:text-white dropdown-item ${
+                index === selectedIndex ? 'bg-accent text-white' : ''
+              }`}
+            >
+              {sneaker.name}
+            </Box>
+          ))}
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+// PropTypes for type checking
 SearchBar.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object,
   inputClassName: PropTypes.string,
-  placeholderClassName: PropTypes.string
+  placeholderClassName: PropTypes.string,
 };
 
 export default SearchBar;
