@@ -10,6 +10,7 @@ const SearchBar = ({
   style,
   inputClassName,
   placeholderClassName,
+  isCartOpen,
 }) => {
   // State for managing search functionality
   const [searchTerm, setSearchTerm] = useState("");
@@ -124,12 +125,11 @@ const SearchBar = ({
 
   // Render the search bar and dropdown
   return (
-    <Box
-      ref={searchRef}
-      className={`relative z-[9998] w-full ${className}`}
-      style={style}
-    >
-      <Flex align="center" className="relative w-full custom-searchbar">
+    <Box ref={searchRef} className={`relative z-20 w-full ${className}`} style={style}>
+      <Flex 
+        className={`relative w-full custom-searchbar ${isCartOpen ? 'search-bar-dimmed' : ''}`}
+        align="center"
+      >
         <input
           ref={inputRef}
           type="text"
@@ -171,6 +171,7 @@ SearchBar.propTypes = {
   style: PropTypes.object,
   inputClassName: PropTypes.string,
   placeholderClassName: PropTypes.string,
+  isCartOpen: PropTypes.bool,
 };
 
 export default SearchBar;

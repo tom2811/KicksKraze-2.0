@@ -77,6 +77,23 @@
 
   .md-login-btn {
     font-size: 11px !important;
-    padding: 0.05rem 0.5rem !important;
+    padding: 0.15rem 0.5rem !important;
   }
+}
+
+/* Cart icon badge styles */
+.cart-icon-badge {
+  font-size: 0.6rem;
+  min-width: 1rem;
+  height: 1rem;
+  padding: 0 0.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #06b6d4;
+  color: white;
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
 }

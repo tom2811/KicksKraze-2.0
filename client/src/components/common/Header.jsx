@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Flex, Button, Box, Text } from '@radix-ui/themes';
+import { Flex, Button, Box, Text, Badge } from '@radix-ui/themes';
 import { FaBars, FaTimes, FaShoppingCart } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext';
 import SearchBar from './SearchBar';
+import CartSlider from '../CartSlider';
 import { Logo, AnimatedLink, DIM_COLOR, FancyButton } from '../StyledComponents';
 
 function Header() {
   const { currentUser, logout } = useAuth();
+  const { cartItems, toggleCart, isCartOpen } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,6 +39,8 @@ function Header() {
     setIsMenuOpen(false);
   };
 
+  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   // Render desktop navigation links and buttons
   const renderDesktopNavigation = () => (
     <Flex align="center" gap={{ initial: '5', md: '6', lg: '7' }} className="hidden md:flex items-center">
@@ -58,16 +63,25 @@ function Header() {
       </AnimatedLink>
       {currentUser ? (
         <>
-          <Link to="/cart" className="text-gray-600 cart-icon-hover transition-colors duration-200">
-            <FaShoppingCart size={20} className="md:w-4 md:h-4 lg:w-5 lg:h-5" />
-          </Link>
-          <FancyButton onClick={logout} className="text-xs md-login-btn lg:text-xs lg:px-3 lg:py-[0.3rem]">
+          <Box className="relative cursor-pointer" onClick={toggleCart}>
+            <FaShoppingCart
+              className="text-xl cart-icon-hover"
+            />
+            {cartItemCount > 0 && (
+              <Badge
+                className="absolute -top-3 -right-3 bg-cyan-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs cursor-pointer"
+              >
+                {cartItemCount}
+              </Badge>
+            )}
+          </Box>
+          <FancyButton onClick={logout} className="text-xs md-login-btn lg:text-xs lg:px-3">
             Logout
           </FancyButton>
         </>
       ) : (
         <Link to="/login">
-          <FancyButton className="text-xs md-login-btn lg:text-xs lg:px-3 lg:py-[0.3rem]">Login</FancyButton>
+          <FancyButton className="text-xs md-login-btn lg:text-xs lg:px-3">Login</FancyButton>
         </Link>
       )}
     </Flex>
@@ -75,14 +89,24 @@ function Header() {
 
   // Render mobile action buttons (cart/login and menu toggle)
   const renderMobileActions = () => (
-    <Flex align="center" gap="2" className="md:hidden">
+    <Flex align="center" gap="5" className="md:hidden">
       {currentUser ? (
-        <Link to="/cart" className="pr-2 text-gray-600 cart-icon-hover">
-          <FaShoppingCart size={20} />
-        </Link>
+        <Box className="relative cursor-pointer" onClick={toggleCart}>
+          <FaShoppingCart 
+            size={20} 
+            className="text-gray-600 cart-icon-hover" 
+          />
+          {cartItemCount > 0 && (
+            <Badge 
+              className="absolute -top-3 -right-3 bg-cyan-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs cursor-pointer"
+            >
+              {cartItemCount}
+            </Badge>
+          )}
+        </Box>
       ) : (
         <Link to="/login">
-          <FancyButton>Login</FancyButton>
+          <FancyButton className="text-xs px-2 py-1">Login</FancyButton>
         </Link>
       )}
       <Button variant="ghost" onClick={toggleMenu} className="p-1 text-gray-600">
@@ -96,9 +120,10 @@ function Header() {
     <Box className={`md:hidden bg-white transition-all duration-300 ${isMenuOpen ? 'max-h-[300px]' : 'max-h-0'} overflow-hidden`}>
       <Flex direction="column" align="center" gap="4" className="px-4 py-6">
         <SearchBar 
-          className="w-full mb-2" 
-          inputClassName="text-[10px] sm:text-xs" 
-          placeholderClassName="text-[10px] sm:text-xs"
+          className="w-full"
+          inputClassName="text-xs md:text-[11px] lg:text-sm" 
+          placeholderClassName="text-[10px] md:text-[10px] lg:text-xs"
+          isCartOpen={isCartOpen}
         />
         <Flex direction="column" align="center" gap="6" className="w-full">
           <MobileNavLink to="/" isActive={location.pathname === '/'}>Home</MobileNavLink>
@@ -109,33 +134,42 @@ function Header() {
     </Box>
   );
 
+  const handleToggleCart = () => {
+    setIsCartOpen(!isCartOpen);
+    toggleCart();
+  };
+
   return (
-    <header className="bg-white shadow-md transition-all duration-300">
-      <div className="container mx-auto px-4 py-3 sm:px-6 md:px-10 lg:px-12 xl:px-5">
-        <Flex justify="between" align="center">
-          {/* Logo */}
-          <Logo className="text-base sm:text-lg md:text-base lg:text-xl cursor-default">KicksKraze</Logo>
+    <>
+      <header className="bg-white shadow-md transition-all duration-300">
+        <div className="container mx-auto px-4 py-3 sm:px-6 md:px-10 lg:px-12 xl:px-5">
+          <Flex justify="between" align="center">
+            {/* Logo */}
+            <Logo className="text-base sm:text-lg md:text-base lg:text-xl cursor-default">KicksKraze</Logo>
 
-          <Flex align="center" className="flex-grow mx-4 md:mx-4 lg:mx-6 xl:mx-8 max-w-2xl hidden md:flex">
-            {/* Search Bar */}
-            <SearchBar 
-              className="w-full"
-              inputClassName="text-xs md:text-[11px] lg:text-sm" 
-              placeholderClassName="text-[10px] md:text-[10px] lg:text-xs"
-            />
+            <Flex align="center" className="flex-grow mx-4 md:mx-4 lg:mx-6 xl:mx-8 max-w-2xl hidden md:flex">
+              {/* Search Bar */}
+              <SearchBar 
+                className="w-full"
+                inputClassName="text-xs md:text-[11px] lg:text-sm" 
+                placeholderClassName="text-[10px] md:text-[10px] lg:text-xs"
+                isCartOpen={isCartOpen}
+              />
+            </Flex>
+
+            {/* Desktop Navigation */}
+            {renderDesktopNavigation()}
+
+            {/* Mobile Actions */}
+            {renderMobileActions()}
           </Flex>
+        </div>
 
-          {/* Desktop Navigation */}
-          {renderDesktopNavigation()}
-
-          {/* Mobile Actions */}
-          {renderMobileActions()}
-        </Flex>
-      </div>
-
-      {/* Mobile Menu */}
-      {renderMobileMenu()}
-    </header>
+        {/* Mobile Menu */}
+        {renderMobileMenu()}
+      </header>
+      <CartSlider />
+    </>
   );
 }
 

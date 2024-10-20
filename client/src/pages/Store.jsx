@@ -165,7 +165,6 @@ function Store() {
         <MainContent 
           state={state}
           handleSortChange={handleSortChange}
-          handleAddToCart={handleAddToCart}
           updateState={updateState}
         />
       </Flex>
@@ -224,7 +223,7 @@ function FilterSection({ brands, selectedBrands, isFilterOpen, handleBrandChange
 }
 
 // Component for rendering main content (sneaker grid, pagination)
-function MainContent({ state, handleSortChange, handleAddToCart, updateState }) {
+function MainContent({ state, handleSortChange, updateState }) {
   return (
     <Box className="w-full md:w-3/4 lg:w-10/12">
       <Flex justify="between" align="center" mb="2" wrap="wrap" gap="2">
@@ -274,7 +273,6 @@ function MainContent({ state, handleSortChange, handleAddToCart, updateState }) 
           <SneakerCard 
             key={sneaker.id} 
             sneaker={sneaker} 
-            onAddToCart={handleAddToCart} 
           />
         ))}
       </Grid>

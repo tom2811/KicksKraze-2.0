@@ -1,24 +1,34 @@
 import React, { useState } from 'react';
 import { Card, Flex, Box, Text, Button, Select, Tooltip, AspectRatio } from '@radix-ui/themes';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
+import { useNavigate } from 'react-router-dom';
 
-function SneakerCard({ sneaker, onAddToCart }) {
+function SneakerCard({ sneaker }) {
   const { currentUser } = useAuth();
+  const { addToCart, isItemInCart, toggleCart } = useCart();
   const [selectedSize, setSelectedSize] = useState('');
   const [showTooltip, setShowTooltip] = useState(false);
+  const navigate = useNavigate();
 
   // Generate sizes from US 4 to US 15
   const availableSizes = Array.from({ length: 12 }, (_, i) => i + 4);
 
   const handleAddToCart = () => {
     if (selectedSize) {
-      onAddToCart({ ...sneaker, size: selectedSize });
+      addToCart({ ...sneaker, size: selectedSize });
       setShowTooltip(false);
     } else {
       setShowTooltip(true);
       setTimeout(() => setShowTooltip(false), 1000);
     }
   };
+
+  const handleViewCart = () => {
+    toggleCart();
+  };
+
+  const isInCart = selectedSize && isItemInCart(sneaker._id, selectedSize);
 
   return (
     <Card className="overflow-hidden shadow-sm">
@@ -83,16 +93,16 @@ function SneakerCard({ sneaker, onAddToCart }) {
                 </Select.Content>
               </Select.Root>
 
-              {/* Add to Cart Button */}
+              {/* Add to Cart / View in Cart Button */}
               <Tooltip content="Please select a size first" open={showTooltip}>
                 <Button 
-                  onClick={handleAddToCart} 
+                  onClick={isInCart ? handleViewCart : handleAddToCart} 
                   size="2"
                   className="flex-grow truncate cursor-pointer"
                   variant="outline"
                   color="cyan"
                 >
-                  Add to Cart
+                  {isInCart ? "View in Cart" : "Add to Cart"}
                 </Button>
               </Tooltip>
             </Flex>
