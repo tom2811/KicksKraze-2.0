@@ -26,11 +26,20 @@
   box-shadow: none !important;
   border: 1px solid #d1d5db !important;
   border-radius: 0.375rem !important;
+  font-size: 0.9rem !important;
+  line-height: 1rem !important;
+  padding-top: 0.475rem !important;
+  padding-bottom: 0.475rem !important;
 }
 
 .custom-searchbar input.rounded-b-none {
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+}
+
+.custom-searchbar input::placeholder {
+  font-size: 0.8rem !important;
+  font-weight: 600;
 }
 
 /* Dropdown Styles */
@@ -48,4 +57,26 @@
 
 .dropdown-item {
   padding-left: 12px !important;
+}
+
+.cart-icon-hover:hover {
+  color: var(--accent-color);
+}
+
+/* Media Queries */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .custom-searchbar input,
+  .custom-searchbar input:focus {
+    font-size: 0.7rem !important;
+    line-height: 0.8rem !important;
+  }
+
+  .custom-searchbar input::placeholder {
+    font-size: 0.65rem !important;
+  }
+
+  .md-login-btn {
+    font-size: 11px !important;
+    padding: 0.05rem 0.5rem !important;
+  }
 }

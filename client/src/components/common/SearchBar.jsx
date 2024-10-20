@@ -134,15 +134,15 @@ const SearchBar = ({
           ref={inputRef}
           type="text"
           placeholder="Find your favorite kicks..."
-          className={`w-full pr-10 pl-3 py-2 rounded-md border border-gray-300 focus:outline-none text-sm ${
+          className={`w-full pr-10 pl-3 py-1.5 md:py-[0.15rem] lg:py-1.5 rounded-md border border-gray-300 focus:outline-none text-sm ${
             showDropdown && matchedItems.length > 0 ? "rounded-b-none" : ""
-          } ${inputClassName}`}
+          } ${inputClassName} ${placeholderClassName}`}
           value={searchTerm}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
         <FaSearch
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors duration-200"
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors duration-200 md:w-3 md:h-3 lg:w-4 lg:h-4"
           onClick={handleSearch}
         />
       </Flex>

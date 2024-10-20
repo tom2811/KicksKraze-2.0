@@ -27,7 +27,7 @@ function SneakerCard({ sneaker, onAddToCart }) {
         <img 
           src={sneaker.imgUrl} 
           alt={sneaker.name} 
-          className="object-cover w-[70%] h-[70%] sm:w-3/4 sm:h-3/4 lg:w-3/4 lg:h-3/4 mx-auto"
+          className="object-cover w-[70%] h-[70%] sm:w-3/4 sm:h-3/4 lg:w-2/3 lg:h-2/3 xl:w-3/4 xl:h-3/4 mx-auto"
         />
       </AspectRatio>
 

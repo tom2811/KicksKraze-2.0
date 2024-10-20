@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Flex, Button, Box } from '@radix-ui/themes';
+import { Flex, Button, Box, Text } from '@radix-ui/themes';
 import { FaBars, FaTimes, FaShoppingCart } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
 import SearchBar from './SearchBar';
-import { FancyButton, Logo, AnimatedLink, DIM_COLOR } from '../StyledComponents';
+import { Logo, AnimatedLink, DIM_COLOR, FancyButton } from '../StyledComponents';
 
 function Header() {
   const { currentUser, logout } = useAuth();
@@ -38,19 +38,36 @@ function Header() {
 
   // Render desktop navigation links and buttons
   const renderDesktopNavigation = () => (
-    <Flex align="center" gap="3" className="hidden md:flex">
-      <AnimatedLink to="/" $isActive={location.pathname === '/'} $dimColor={DIM_COLOR}>Home</AnimatedLink>
-      <AnimatedLink as="button" onClick={handleStoreClick} $isActive={location.pathname === '/store'} $dimColor={DIM_COLOR}>Store</AnimatedLink>
+    <Flex align="center" gap={{ initial: '5', md: '6', lg: '7' }} className="hidden md:flex items-center">
+      <AnimatedLink 
+        to="/" 
+        $isActive={location.pathname === '/'} 
+        $dimColor={DIM_COLOR} 
+        className="text-sm md:text-xs lg:text-sm xl:text-base"
+      >
+        Home
+      </AnimatedLink>
+      <AnimatedLink 
+        as="button" 
+        onClick={handleStoreClick} 
+        $isActive={location.pathname === '/store'} 
+        $dimColor={DIM_COLOR} 
+        className="text-sm md:text-xs lg:text-sm xl:text-base"
+      >
+        Store
+      </AnimatedLink>
       {currentUser ? (
         <>
-          <Link to="/cart" className="text-gray-600 lg:mr-4">
-            <FaShoppingCart size={16} className="sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+          <Link to="/cart" className="text-gray-600 cart-icon-hover transition-colors duration-200">
+            <FaShoppingCart size={20} className="md:w-4 md:h-4 lg:w-5 lg:h-5" />
           </Link>
-          <FancyButton onClick={logout}>Logout</FancyButton>
+          <FancyButton onClick={logout} className="text-xs md-login-btn lg:text-xs lg:px-3 lg:py-[0.3rem]">
+            Logout
+          </FancyButton>
         </>
       ) : (
         <Link to="/login">
-          <FancyButton>Login</FancyButton>
+          <FancyButton className="text-xs md-login-btn lg:text-xs lg:px-3 lg:py-[0.3rem]">Login</FancyButton>
         </Link>
       )}
     </Flex>
@@ -60,7 +77,7 @@ function Header() {
   const renderMobileActions = () => (
     <Flex align="center" gap="2" className="md:hidden">
       {currentUser ? (
-        <Link to="/cart" className="pr-2 text-gray-600">
+        <Link to="/cart" className="pr-2 text-gray-600 cart-icon-hover">
           <FaShoppingCart size={20} />
         </Link>
       ) : (
@@ -77,36 +94,34 @@ function Header() {
   // Render mobile menu content
   const renderMobileMenu = () => (
     <Box className={`md:hidden bg-white transition-all duration-300 ${isMenuOpen ? 'max-h-[300px]' : 'max-h-0'} overflow-hidden`}>
-      <Flex direction="column" align="center" gap="2" className="px-4 py-2">
+      <Flex direction="column" align="center" gap="4" className="px-4 py-6">
         <SearchBar 
-          className="mb-2" 
+          className="w-full mb-2" 
           inputClassName="text-[10px] sm:text-xs" 
           placeholderClassName="text-[10px] sm:text-xs"
         />
-        <NavLink to="/" isActive={location.pathname === '/'} className="w-full">Home</NavLink>
-        <NavLink as="button" onClick={handleStoreClick} isActive={location.pathname === '/store'} className="w-full">Store</NavLink>
-        {currentUser && (
-          <FancyButton onClick={logout} className="w-full mb-2">
-            Logout
-          </FancyButton>
-        )}
+        <Flex direction="column" align="center" gap="6" className="w-full">
+          <MobileNavLink to="/" isActive={location.pathname === '/'}>Home</MobileNavLink>
+          <MobileNavLink as="button" onClick={handleStoreClick} isActive={location.pathname === '/store'}>Store</MobileNavLink>
+          {currentUser && <MobileNavLink as="button" onClick={logout}>Logout</MobileNavLink>}
+        </Flex>
       </Flex>
     </Box>
   );
 
   return (
     <header className="bg-white shadow-md transition-all duration-300">
-      <div className="container mx-auto px-6 py-3 sm:px-4 sm:py-2 md:px-3 md:py-3">
+      <div className="container mx-auto px-4 py-3 sm:px-6 md:px-10 lg:px-12 xl:px-5">
         <Flex justify="between" align="center">
           {/* Logo */}
-          <Logo className="text-base sm:text-lg md:text-xl cursor-default">KicksKraze</Logo>
+          <Logo className="text-base sm:text-lg md:text-base lg:text-xl cursor-default">KicksKraze</Logo>
 
-          <Flex align="center" className="flex-grow mx-4 md:mx-6 max-w-2xl hidden md:flex">
+          <Flex align="center" className="flex-grow mx-4 md:mx-4 lg:mx-6 xl:mx-8 max-w-2xl hidden md:flex">
             {/* Search Bar */}
             <SearchBar 
               className="w-full"
-              inputClassName="text-[10px] sm:text-xs md:text-xs lg:text-sm" 
-              placeholderClassName="text-[10px] sm:text-xs md:text-xs lg:text-sm"
+              inputClassName="text-xs md:text-[11px] lg:text-sm" 
+              placeholderClassName="text-[10px] md:text-[10px] lg:text-xs"
             />
           </Flex>
 
@@ -124,17 +139,18 @@ function Header() {
   );
 }
 
-function NavLink({ children, isActive, ...props }) {
+function MobileNavLink({ children, isActive, ...props }) {
   return (
-    <Box
+    <Text
       as={props.as || Link}
       {...props}
+      size="2"
       className={`text-gray-600 hover:text-cyan-500 transition-colors duration-200 ${
         isActive ? 'text-cyan-500' : ''
       } ${props.className || ''}`}
     >
       {children}
-    </Box>
+    </Text>
   );
 }
 

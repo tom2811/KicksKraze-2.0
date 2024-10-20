@@ -5,6 +5,7 @@ import { FaChevronLeft, FaChevronRight, FaChevronDown } from 'react-icons/fa';
 import { getAllSneakers, getBrands, getSneakerById } from '../services/api';
 import SneakerCard from '../components/SneakerCard';
 import { FilterMenu } from '../components/StyledComponents';
+import { DIM_COLOR } from '../components/StyledComponents';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -152,7 +153,7 @@ function Store() {
   if (state.error) return <div>Error: {state.error}</div>;
 
   return (
-    <Container className="py-4 px-2 md:py-6 md:px-3">
+    <Container className="py-4 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       <Flex direction="column" className="md:flex-row md:gap-2 lg:gap-4">
         <FilterSection 
           brands={state.brands}
@@ -252,12 +253,13 @@ function MainContent({ state, handleSortChange, handleAddToCart, updateState }) 
         <Select.Root value={state.sortOrder} onValueChange={handleSortChange}>
           <Select.Trigger 
             color="cyan" 
-            className="cursor-pointer text-xs sm:text-xs md:text-xs lg:text-sm" 
-            size={{ initial: '2', md: '1' }}
+            className={`cursor-pointer text-xs md:text-sm lg:text-sm`}
+            style={{ color: DIM_COLOR }}
+            size="2"
           />
           <Select.Content 
             color="cyan" 
-            className="text-xs sm:text-xs md:text-xs lg:text-sm"
+            className="text-xs md:text-sm lg:text-sm"
           >
             <Select.Item value="default" className="cursor-pointer">Sort: Featured</Select.Item>
             <Select.Item value="highToLow" className="cursor-pointer">Price: High to Low</Select.Item>
