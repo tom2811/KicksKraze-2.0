@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Heading, Flex, Box, Checkbox, Text, Grid, Button, Select, Badge } from '@radix-ui/themes';
 import { FaChevronLeft, FaChevronRight, FaChevronDown } from 'react-icons/fa';
 import { getAllSneakers, getBrands, getSneakerById } from '../services/api';
-import SneakerCard from '../components/SneakerCard';
+import SneakerCard from '../components/product/SneakerCard';
 import { FilterMenu } from '../components/StyledComponents';
 import { DIM_COLOR } from '../components/StyledComponents';
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Flex, Box, Text, Button, Select, Tooltip, AspectRatio } from '@radix-ui/themes';
-import { useAuth } from '../contexts/AuthContext';
-import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
 
 function SneakerCard({ sneaker }) {

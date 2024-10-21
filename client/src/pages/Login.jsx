@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Container, Heading, Text, TextField, Button, Flex, Box } from '@radix-ui/themes';
-import { FaEnvelope, FaLock } from 'react-icons/fa';
-import { DIM_COLOR, FancyButton } from '../components/StyledComponents';
-import ForgotPassword from '../components/ForgotPassword';
+import {
+  Container,
+  Heading,
+  Text,
+  TextField,
+  Button,
+  Flex,
+  Box,
+} from "@radix-ui/themes";
+import { FaEnvelope, FaLock } from "react-icons/fa";
+import { DIM_COLOR, FancyButton } from "../components/StyledComponents";
+import ForgotPassword from "../components/auth/ForgotPassword";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -18,20 +26,20 @@ function Login() {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/');
+      navigate("/");
     } catch (error) {
       switch (error.code) {
-        case 'auth/invalid-credential':
-          setError('Invalid email or password. Please try again.');
+        case "auth/invalid-credential":
+          setError("Invalid email or password. Please try again.");
           break;
-        case 'auth/too-many-requests':
-          setError('Too many failed login attempts. Please try again later.');
+        case "auth/too-many-requests":
+          setError("Too many failed login attempts. Please try again later.");
           break;
-        case 'auth/network-request-failed':
-          setError('Network error. Please check your internet connection.');
+        case "auth/network-request-failed":
+          setError("Network error. Please check your internet connection.");
           break;
         default:
-          setError('An error occurred during login. Please try again.');
+          setError("An error occurred during login. Please try again.");
       }
     }
   };
@@ -42,7 +50,11 @@ function Login() {
         <Heading size="8" className="text-center" style={{ color: DIM_COLOR }}>
           Welcome Back
         </Heading>
-        {error && <Text color="red" size="2">{error}</Text>}
+        {error && (
+          <Text color="red" size="2">
+            {error}
+          </Text>
+        )}
         {showForgotPassword ? (
           <ForgotPassword onClose={() => setShowForgotPassword(false)} />
         ) : (
@@ -80,8 +92,8 @@ function Login() {
                     Log In
                   </FancyButton>
                   <Flex justify="end">
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       onClick={() => setShowForgotPassword(true)}
                       className="text-xs"
                       style={{ color: DIM_COLOR }}
@@ -95,7 +107,10 @@ function Login() {
           </Box>
         )}
         <Text size="2" style={{ color: DIM_COLOR }}>
-          Don't have an account? <Link to="/register" className="text-cyan-600 hover:underline">Sign up</Link>
+          Don't have an account?{" "}
+          <Link to="/register" className="text-cyan-600 hover:underline">
+            Sign up
+          </Link>
         </Text>
       </Flex>
     </Container>
