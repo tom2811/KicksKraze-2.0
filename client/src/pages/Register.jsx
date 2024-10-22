@@ -1,43 +1,80 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
-import { Container, Heading, Text, TextField, Button, Flex, Box } from '@radix-ui/themes';
+import { Container, Heading, Text, TextField, Flex, Box } from '@radix-ui/themes';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { DIM_COLOR, FancyButton } from '../components/StyledComponents';
+import LoadingSpinner from "../components/common/LoadingSpinner";
+
+// Minimum password length requirement
+const MIN_PASSWORD_LENGTH = 6;
 
 function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  // State management for form fields and UI
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Hooks
   const { register } = useAuth();
   const navigate = useNavigate();
 
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({ ...prevData, [name]: value }));
+  };
+
+  // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     setError('');
 
-    if (password !== confirmPassword) {
-      return setError("Passwords don't match");
-    }
-
-    if (password.length < 6) {
-      return setError("Password must be at least 6 characters long");
+    // Validate form inputs
+    if (!validateForm()) {
+      setIsLoading(false);
+      return;
     }
 
     try {
-      await register(email, password);
+      await register(formData.email, formData.password);
       navigate('/');
     } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
+      handleRegistrationError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Form validation
+  const validateForm = () => {
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords don't match");
+      return false;
+    }
+    if (formData.password.length < MIN_PASSWORD_LENGTH) {
+      setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+      return false;
+    }
+    return true;
+  };
+
+  // Handle registration errors
+  const handleRegistrationError = (error) => {
+    switch (error.code) {
+      case 'auth/email-already-in-use':
         setError('Email is already in use');
-      } else if (error.code === 'auth/invalid-email') {
+        break;
+      case 'auth/invalid-email':
         setError('Invalid email address');
-      } else if (error.code === 'auth/weak-password') {
-        setError('Password is too weak');
-      } else {
+        break;
+      default:
         setError('Failed to create an account. Please try again.');
-      }
     }
   };
 
@@ -51,47 +88,32 @@ function Register() {
         <Box className="w-full max-w-sm">
           <form onSubmit={handleSubmit}>
             <Flex direction="column" gap="4">
-              <TextField.Root>
-                <TextField.Slot>
-                  <FaEnvelope color={DIM_COLOR} />
-                </TextField.Slot>
-                <TextField.Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                  required
-                  className="custom-textfield"
-                />
-              </TextField.Root>
-              <TextField.Root>
-                <TextField.Slot>
-                  <FaLock color={DIM_COLOR} />
-                </TextField.Slot>
-                <TextField.Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  required
-                  className="custom-textfield"
-                />
-              </TextField.Root>
-              <TextField.Root>
-                <TextField.Slot>
-                  <FaLock color={DIM_COLOR} />
-                </TextField.Slot>
-                <TextField.Input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm Password"
-                  required
-                  className="custom-textfield"
-                />
-              </TextField.Root>
-              <FancyButton type="submit" className="w-full py-2 text-sm">
-                Register
+              <InputField
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Email"
+                icon={<FaEnvelope color={DIM_COLOR} />}
+              />
+              <InputField
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="Password"
+                icon={<FaLock color={DIM_COLOR} />}
+              />
+              <InputField
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                placeholder="Confirm Password"
+                icon={<FaLock color={DIM_COLOR} />}
+              />
+              <FancyButton type="submit" className="w-full py-2 text-sm" disabled={isLoading}>
+                {isLoading ? <LoadingSpinner /> : "Register"}
               </FancyButton>
             </Flex>
           </form>
@@ -101,6 +123,26 @@ function Register() {
         </Text>
       </Flex>
     </Container>
+  );
+}
+
+// Reusable input field component
+function InputField({ type, name, value, onChange, placeholder, icon }) {
+  return (
+    <TextField.Root>
+      <TextField.Slot>
+        {icon}
+      </TextField.Slot>
+      <TextField.Input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        required
+        className="custom-textfield"
+      />
+    </TextField.Root>
   );
 }
 

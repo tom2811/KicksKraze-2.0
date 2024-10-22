@@ -20,6 +20,10 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const isAuthPage = () => {
+    return ['/login', '/register'].includes(location.pathname) || location.pathname.startsWith('/forgot-password');
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       const header = document.querySelector("header");
@@ -177,18 +181,20 @@ function Header() {
               KicksKraze
             </Logo>
 
-            <Flex
-              align="center"
-              className="flex-grow mx-4 md:mx-4 lg:mx-6 xl:mx-8 max-w-2xl hidden md:flex"
-            >
-              {/* Search Bar */}
-              <SearchBar
-                className="w-full"
-                inputClassName="text-xs md:text-[11px] lg:text-sm"
-                placeholderClassName="text-[10px] md:text-[10px] lg:text-xs"
-                isCartOpen={isCartOpen}
-              />
-            </Flex>
+            {!isAuthPage() && (
+              <Flex
+                align="center"
+                className="flex-grow mx-4 md:mx-4 lg:mx-6 xl:mx-8 max-w-2xl hidden md:flex"
+              >
+                {/* Search Bar */}
+                <SearchBar
+                  className="w-full"
+                  inputClassName="text-xs md:text-[11px] lg:text-sm"
+                  placeholderClassName="text-[10px] md:text-[10px] lg:text-xs"
+                  isCartOpen={isCartOpen}
+                />
+              </Flex>
+            )}
 
             {/* Desktop Navigation */}
             {renderDesktopNavigation()}

@@ -3,22 +3,27 @@ import { useAuth } from "../../contexts/AuthContext";
 import { TextField, Button, Text, Flex, Box, Heading } from "@radix-ui/themes";
 import { FaEnvelope } from "react-icons/fa";
 import { DIM_COLOR, FancyButton } from "../StyledComponents";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 function ForgotPassword({ onClose }) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { resetPassword } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setMessage("");
+    setError("");
     try {
-      setMessage("");
-      setError("");
       await resetPassword(email);
       setMessage("Check your inbox for further instructions");
-    } catch {
-      setError("Failed to reset password");
+    } catch (error) {
+      setError("Failed to reset password. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -32,12 +37,12 @@ function ForgotPassword({ onClose }) {
         Reset Password
       </Heading>
       {message && (
-        <Text color="green" size="2" className="mb-4">
+        <Text color="green" size="2" className="mb-4 text-center">
           {message}
         </Text>
       )}
       {error && (
-        <Text color="red" size="2" className="mb-4">
+        <Text color="red" size="2" className="mb-4 text-center">
           {error}
         </Text>
       )}
@@ -57,8 +62,8 @@ function ForgotPassword({ onClose }) {
             />
           </TextField.Root>
           <Flex direction="column" gap="2">
-            <FancyButton type="submit" className="w-full py-2 text-sm">
-              Reset Password
+            <FancyButton type="submit" className="w-full py-2 text-sm" disabled={isLoading}>
+              {isLoading ? <LoadingSpinner /> : "Reset Password"}
             </FancyButton>
             <Flex justify="end">
               <Button

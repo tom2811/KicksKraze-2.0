@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Text, Flex, Box, Grid } from '@radix-ui/themes';
 import { FancyButton, ShimmeringHeading } from '../components/StyledComponents';
 import FeatureCard from '../components/feature/FeatureCard';
 import { featureCards } from '../data/featureCardsData';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 1000);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Container className="min-h-[calc(100vh-128px)] flex flex-col px-4 sm:px-6 md:px-8 py-8 md:py-12">
       <Box className="max-w-5xl mx-auto w-full flex-grow flex flex-col">
