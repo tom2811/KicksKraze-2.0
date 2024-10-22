@@ -26,20 +26,27 @@
   box-shadow: none !important;
   border: 1px solid #d1d5db !important;
   border-radius: 0.375rem !important;
-  font-size: 0.9rem !important;
-  line-height: 1rem !important;
-  padding-top: 0.475rem !important;
-  padding-bottom: 0.475rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  padding: 0.5rem 0.75rem !important;
+  color: #374151 !important;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.custom-searchbar input:focus {
+  border-color: #d1d5db !important;
+}
+
+.custom-searchbar input::placeholder {
+  color: #9CA3AF !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  opacity: 0.7;
 }
 
 .custom-searchbar input.rounded-b-none {
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
-}
-
-.custom-searchbar input::placeholder {
-  font-size: 0.8rem !important;
-  font-weight: 600;
 }
 
 /* Dropdown Styles */
@@ -67,12 +74,13 @@
 @media (min-width: 768px) and (max-width: 1023px) {
   .custom-searchbar input,
   .custom-searchbar input:focus {
-    font-size: 0.7rem !important;
-    line-height: 0.8rem !important;
+    font-size: 0.75rem !important;
+    line-height: 1rem !important;
+    padding: 0.375rem 0.625rem !important;
   }
 
   .custom-searchbar input::placeholder {
-    font-size: 0.65rem !important;
+    font-size: 0.75rem !important;
   }
 
   .md-login-btn {

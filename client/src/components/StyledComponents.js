@@ -4,7 +4,7 @@ import { Heading } from '@radix-ui/themes';
 
 // Constants
 export const DIM_COLOR = '#4A4A4A';
-export const ACCENT_COLOR = 'hsl(192 91% 36%)';
+export const ACCENT_COLOR = 'hsl(192, 91%, 36%)';
 
 // Keyframes
 const shimmer = keyframes`
@@ -16,6 +16,14 @@ const shimmer = keyframes`
 `;
 
 // Styled Components
+export const Logo = styled.span`
+  font-family: 'Caveat', cursive;
+  color: white;
+  font-weight: 700;
+  font-size: 2rem;
+  -webkit-text-stroke: 1.5px ${ACCENT_COLOR};
+`;
+
 export const FilterMenu = styled.div`
   @media (max-width: 767px) {
     max-height: ${props => props.$isOpen ? '300px' : '0'};
@@ -23,13 +31,6 @@ export const FilterMenu = styled.div`
     transition: max-height 0.3s ease-in-out;
     padding-left: 1rem;
   }
-`;
-
-export const Logo = styled.span`
-  font-family: 'Architects Daughter', cursive;
-  color: #000;
-  -webkit-text-stroke: 1px #000;
-  letter-spacing: -0.03em;
 `;
 
 export const FancyButton = styled.button`

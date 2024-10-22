@@ -142,7 +142,7 @@ const SearchBar = ({
           onKeyDown={handleKeyDown}
         />
         <FaSearch
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors duration-200 md:w-3 md:h-3 lg:w-4 lg:h-4"
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-cyan-500 transition-colors duration-200 md:w-3 md:h-3 lg:w-4 lg:h-4"
           onClick={handleSearch}
         />
       </Flex>
