@@ -41,7 +41,7 @@ function Home() {
           </Flex>
 
           {/* Feature Cards */}
-          <Grid columns={{ initial: "1", md: "2" }} gap="6" className="mb-16">
+          <Grid columns={{ initial: "1", md: "2" }} gap="6" className="mb-5">
             {featureCards.map((card, index) => (
               <FeatureCard 
                 key={index}
