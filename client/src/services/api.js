@@ -22,15 +22,6 @@ export const getSneakerById = async (id) => {
   }
 };
 
-export const getBrands = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/brands`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const searchSneakers = async (term) => {
   try {
     const response = await axios.get(`${API_URL}/sneakers/search`, {
