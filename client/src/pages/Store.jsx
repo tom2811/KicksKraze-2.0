@@ -278,7 +278,7 @@ function MainContent({ state, handleSortChange, updateState }) {
       </Grid>
 
       {/* Pagination */}
-      <Flex justify="center" mt="5">
+      <Flex justify="center" mt="4">
         <Flex align="center" gap="2">
           <Button 
             onClick={() => updateState({ currentPage: Math.max(state.currentPage - 1, 1) })}

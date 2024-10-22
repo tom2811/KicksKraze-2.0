@@ -1,9 +1,19 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Heading } from '@radix-ui/themes';
 
 // Constants
 export const DIM_COLOR = '#4A4A4A';
 export const ACCENT_COLOR = 'hsl(192 91% 36%)';
+
+// Keyframes
+const shimmer = keyframes`
+  0% { background-position: 100% 0; }
+  25% { background-position: 80% 0; }
+  50% { background-position: 60% 0; }
+  75% { background-position: 40% 0; }
+  100% { background-position: 20% 0; }
+`;
 
 // Styled Components
 export const FilterMenu = styled.div`
@@ -73,6 +83,7 @@ export const AnimatedLink = styled(Link)`
   color: ${props => props.$dimColor};
   text-decoration: none;
   position: relative;
+
   &::after {
     content: '';
     position: absolute;
@@ -85,4 +96,20 @@ export const AnimatedLink = styled(Link)`
     transform-origin: bottom left;
     transition: transform 0.3s ease-out;
   }
+`;
+
+export const ShimmeringHeading = styled(Heading)`
+  background: linear-gradient(
+    90deg,
+    #0e7490 0%,
+    #0e7490 45%,
+    #22d3ee 50%,
+    #0e7490 55%,
+    #0e7490 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: ${shimmer} 5s linear infinite;
 `;
