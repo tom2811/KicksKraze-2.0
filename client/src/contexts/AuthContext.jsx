@@ -27,6 +27,7 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    localStorage.removeItem(`cart_${currentUser.uid}`);
     return signOut(auth);
   }
 
