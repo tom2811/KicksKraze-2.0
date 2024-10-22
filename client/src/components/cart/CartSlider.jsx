@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Box, Flex, Text, Button, IconButton } from "@radix-ui/themes";
 import { FaPlus, FaMinus, FaTimes } from "react-icons/fa";
 import { useCart } from "../../contexts/CartContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { DIM_COLOR } from "../StyledComponents";
 import ThankYouModal from "./ThankYouModal";
 
@@ -15,6 +16,7 @@ const CartSlider = () => {
     cartTotal,
     clearCart,
   } = useCart();
+  const { currentUser } = useAuth();
   const [isThankYouModalOpen, setIsThankYouModalOpen] = useState(false);
   const cartRef = useRef(null);
 
@@ -63,7 +65,12 @@ const CartSlider = () => {
         }}
       >
         <Flex direction="column" className="h-full">
-          <Flex justify="end" align="center" p="4">
+          <Flex justify="between" align="center" p="4">
+            {currentUser && (
+              <Text size="2" style={{ color: DIM_COLOR }}>
+                {currentUser.email}
+              </Text>
+            )}
             <IconButton
               variant="ghost"
               onClick={toggleCart}
