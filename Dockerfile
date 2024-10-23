@@ -23,7 +23,7 @@ RUN npm install -g serve
 EXPOSE 3000
 
 # Create a custom serve.json file
-RUN echo '{"public": "client/dist", "rewrites": [{"source": "**", "destination": "/index.html"}], "headers": [{"source": "**/*.js", "headers": [{"key": "Content-Type", "value": "application/javascript"}]}]}' > serve.json
+RUN echo '{"public": "client/dist", "rewrites": [{"source": "**", "destination": "/index.html"}], "headers": [{"source": "**/*.js", "headers": [{"key": "Content-Type", "value": "application/javascript"}]}, {"source": "**/*.jsx", "headers": [{"key": "Content-Type", "value": "application/javascript"}]}]}' > serve.json
 
 # Define the command to run the app
 CMD ["serve", "-s", "client/dist", "-l", "3000", "--config", "../serve.json"]
