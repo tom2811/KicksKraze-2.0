@@ -15,6 +15,7 @@ async function initializeApp() {
     console.log('Database connected successfully');
   } catch (error) {
     console.error('Failed to connect to database:', error);
+    console.error('App will continue without database connection');
   }
 
   app.use(cors());
@@ -26,12 +27,16 @@ async function initializeApp() {
     next();
   });
 
+  // Use sneaker routes
   app.use('/api/sneakers', sneakerRoutes);
 
   // Health check route
   app.get('/api/health', (req, res) => {
     console.log('Health check route hit');
-    res.status(200).json({ status: 'OK', message: 'Server is running' });
+    res.status(200).json({ 
+      status: 'OK', 
+      message: 'Server is running'
+    });
   });
 
   // Test route
@@ -55,9 +60,9 @@ async function initializeApp() {
   console.log('App initialization completed');
 }
 
+// Initialize the app
 initializeApp().catch(error => {
   console.error('Failed to initialize app:', error);
-  process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {

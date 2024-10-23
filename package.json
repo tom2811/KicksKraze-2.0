@@ -1,13 +1,15 @@
 {
-  "private": true,
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "scripts": {
-    "start": "cd server && node server.js",
-    "build": "cd client && npm install && npm run build"
-  },
-  "devDependencies": {
-    "vite": "^5.1.6"
+    "private": true,
+    "engines": {
+      "node": ">=14.0.0"
+    },
+    "scripts": {
+      "start": "cd server && node server.js",
+      "build": "cd client && npm install && npm run build",
+      "dev": "concurrently \"cd client && npm run dev\" \"cd server && npm run dev\""
+    },
+    "devDependencies": {
+      "vite": "^5.1.6",
+      "concurrently": "^8.0.1"
+    }
   }
-}

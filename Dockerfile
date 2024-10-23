@@ -4,26 +4,27 @@ FROM node:18
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy package.json files
+COPY client/package*.json ./client/
+COPY server/package*.json ./server/
 
 # Install dependencies
-RUN npm install
+RUN cd client && npm install
+RUN cd server && npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY client ./client
+COPY server ./server
 
-# Build the application
-RUN cd client && npm install && npm run build
+# Build the client application
+RUN cd client && npm run build
 
-# Install a simple server for serving static content
-RUN npm install -g serve
+# Expose the ports the app runs on
+EXPOSE 3000 5000
 
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Create a custom serve.json file
-RUN echo '{"public": "client/dist", "rewrites": [{"source": "**", "destination": "/index.html"}], "headers": [{"source": "**/*.js", "headers": [{"key": "Content-Type", "value": "application/javascript"}]}, {"source": "**/*.jsx", "headers": [{"key": "Content-Type", "value": "application/javascript"}]}]}' > serve.json
+# Create a start script
+RUN echo '#!/bin/sh\ncd /app/server && node server.js & cd /app/client && npm run preview' > start.sh
+RUN chmod +x start.sh
 
 # Define the command to run the app
-CMD ["serve", "-s", "client/dist", "-l", "3000", "--config", "../serve.json"]
+CMD ["/bin/sh", "./start.sh"]

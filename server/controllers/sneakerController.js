@@ -1,8 +1,4 @@
 const Sneaker = require('../models/Sneaker');
-const redisClient = require('../utils/redis');
-
-// Constants
-const CACHE_DURATION = 3600; // 1 hour
 
 // Helper Functions
 const parseQueryParams = (query) => ({
@@ -26,25 +22,10 @@ const getSortOrder = (sortOrder) => {
   return {};
 };
 
-// Cache Helpers
-const getCachedData = async (key) => {
-  const cachedData = await redisClient.get(key);
-  return cachedData ? JSON.parse(cachedData) : null;
-};
-
-const setCachedData = async (key, data, duration = CACHE_DURATION) => {
-  await redisClient.setEx(key, duration, JSON.stringify(data));
-};
-
 // Controller Functions
 exports.getAllSneakers = async (req, res) => {
   try {
     const { page, limit, brands, sortOrder, searchQuery } = parseQueryParams(req.query);
-    const cacheKey = `sneakers:${page}:${limit}:${brands.join(',')}:${sortOrder}:${searchQuery}`;
-
-    const cachedData = await getCachedData(cacheKey);
-    if (cachedData) return res.json(cachedData);
-
     const query = buildMongoQuery(brands, searchQuery);
     const sort = getSortOrder(sortOrder);
 
@@ -60,7 +41,6 @@ exports.getAllSneakers = async (req, res) => {
       totalSneakers
     };
 
-    await setCachedData(cacheKey, result);
     res.json(result);
   } catch (error) {
     console.error("Server error:", error);
@@ -70,15 +50,8 @@ exports.getAllSneakers = async (req, res) => {
 
 exports.getSneakerById = async (req, res) => {
   try {
-    const cacheKey = `sneaker:${req.params.id}`;
-
-    const cachedData = await getCachedData(cacheKey);
-    if (cachedData) return res.json(cachedData);
-
     const sneaker = await Sneaker.findById(req.params.id);
     if (!sneaker) return res.status(404).json({ message: 'Sneaker not found' });
-
-    await setCachedData(cacheKey, sneaker);
     res.json(sneaker);
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -87,11 +60,6 @@ exports.getSneakerById = async (req, res) => {
 
 exports.getBrands = async (req, res) => {
   try {
-    const cacheKey = 'brands';
-
-    const cachedData = await getCachedData(cacheKey);
-    if (cachedData) return res.json(cachedData);
-
     const [brands, counts] = await Promise.all([
       Sneaker.distinct('brand'),
       Sneaker.aggregate([{ $group: { _id: '$brand', count: { $sum: 1 } } }])
@@ -103,8 +71,6 @@ exports.getBrands = async (req, res) => {
     }, {});
 
     const result = { brands, counts: brandCounts };
-
-    await setCachedData(cacheKey, result);
     res.json(result);
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
