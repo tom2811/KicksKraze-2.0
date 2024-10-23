@@ -16,6 +16,17 @@
       "dest": "/"
     }
   ],
+  "headers": [
+    {
+      "source": "/(.*)\\.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        }
+      ]
+    }
+  ],
   "env": {
     "NODE_ENV": "production"
   }

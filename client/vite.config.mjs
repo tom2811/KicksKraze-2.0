@@ -8,13 +8,6 @@ export default defineConfig(({ mode }) => ({
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
-  },
-  optimizeDeps: {
-    include: ['firebase/app', 'firebase/auth']
-  },
-  define: {
-    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL),
   },
   build: {
     sourcemap: mode === 'development',
@@ -29,14 +22,12 @@ export default defineConfig(({ mode }) => ({
     }
   },
   server: {
-    open: true,
     port: 3000,
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
         changeOrigin: true,
       }
-    },
-    middlewareMode: 'html'
+    }
   }
 }));
