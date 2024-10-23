@@ -13,13 +13,19 @@ export default defineConfig(({ mode }) => ({
     include: ['firebase/app', 'firebase/auth']
   },
   define: {
-    'process.env': process.env
+    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL),
   },
   build: {
     sourcemap: mode === 'development'
   },
   server: {
     open: true,
-    port: 3000
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      }
+    }
   }
 }));
