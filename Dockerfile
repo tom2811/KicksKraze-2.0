@@ -23,7 +23,7 @@ RUN cd client && npm run build
 EXPOSE 5000
 
 # Create a start script
-RUN echo '#!/bin/sh\ncd /app/server && PORT=5000 node server.js' > start.sh
+RUN echo '#!/bin/sh\ncd /app/server && node server.js' > start.sh
 RUN chmod +x start.sh
 
 # Define the command to run the app
