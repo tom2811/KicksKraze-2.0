@@ -9,14 +9,14 @@
       }
     },
     {
-      "src": "server/api/index.js",
+      "src": "server/server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server/api/index.js"
+      "dest": "server/server.js"
     },
     {
       "src": "^/assets/(.*)",
@@ -25,6 +25,9 @@
     {
       "src": "^/favicon.ico",
       "dest": "client/dist/favicon.ico"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
