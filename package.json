@@ -1,7 +1,10 @@
 {
   "private": true,
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npx vite build"
   },
   "devDependencies": {
     "vite": "^5.1.6"
