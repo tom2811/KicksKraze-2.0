@@ -16,7 +16,8 @@ export default defineConfig(({ mode }) => ({
     'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL),
   },
   build: {
-    sourcemap: mode === 'development'
+    sourcemap: mode === 'development',
+    outDir: 'dist'
   },
   server: {
     open: true,
