@@ -9,20 +9,27 @@ const app = express();
 async function initializeApp() {
   await connectDB();
 
-  app.use(cors({ origin: process.env.CLIENT_URL }));
+  app.use(cors());
   app.use(express.json());
 
+  // Add logging middleware
+  app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+  });
+
   app.use('/api/sneakers', sneakerRoutes);
+
+  // Health check route
+  app.get('/api/health', (req, res) => {
+    console.log('Health check route hit');
+    res.status(200).json({ status: 'OK' });
+  });
 
   // Error handling middleware
   app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });
-  });
-
-  // Health check route
-  app.get('/api/health', (req, res) => {
-    res.status(200).json({ status: 'OK' });
   });
 
   // Handle undefined routes
@@ -39,13 +46,5 @@ initializeApp().catch(error => {
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
-
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
 
 module.exports = app;

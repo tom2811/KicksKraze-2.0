@@ -16,22 +16,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server/server.js"
-    },
-    {
-      "src": "^/assets/(.*)",
-      "dest": "client/dist/assets/$1"
-    },
-    {
-      "src": "^/favicon.ico",
-      "dest": "client/dist/favicon.ico"
-    },
-    {
-      "handle": "filesystem"
+      "dest": "/server/server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "client/dist/index.html"
+      "dest": "/client/dist/$1"
     }
   ],
   "env": {
