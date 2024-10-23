@@ -19,11 +19,11 @@ COPY server ./server
 # Build the client application
 RUN cd client && npm run build
 
-# Expose the ports the app runs on
-EXPOSE 3000 5000
+# Expose the port the app runs on
+EXPOSE 5000
 
 # Create a start script
-RUN echo '#!/bin/sh\ncd /app/server && node server.js & cd /app/client && npm run preview' > start.sh
+RUN echo '#!/bin/sh\ncd /app/server && PORT=5000 node server.js' > start.sh
 RUN chmod +x start.sh
 
 # Define the command to run the app
