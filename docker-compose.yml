@@ -9,4 +9,5 @@ services:
       - NODE_ENV=production
       - PORT=5000
     env_file:
+      - ./client/.env.production
       - ./server/.env
