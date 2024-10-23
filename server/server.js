@@ -6,15 +6,23 @@ const sneakerRoutes = require('./routes/sneakerRoutes');
 
 const app = express();
 
+console.log('Server code is running');
+
 async function initializeApp() {
-  await connectDB();
+  console.log('Initializing app...');
+  try {
+    await connectDB();
+    console.log('Database connected successfully');
+  } catch (error) {
+    console.error('Failed to connect to database:', error);
+  }
 
   app.use(cors());
   app.use(express.json());
 
   // Add logging middleware
   app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
     next();
   });
 
@@ -23,19 +31,28 @@ async function initializeApp() {
   // Health check route
   app.get('/api/health', (req, res) => {
     console.log('Health check route hit');
-    res.status(200).json({ status: 'OK' });
+    res.status(200).json({ status: 'OK', message: 'Server is running' });
+  });
+
+  // Test route
+  app.get('/api/test', (req, res) => {
+    console.log('Test route hit');
+    res.status(200).json({ message: 'Test route is working' });
   });
 
   // Error handling middleware
   app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: 'Something went wrong!' });
+    console.error('Error occurred:', err);
+    res.status(500).json({ message: 'Something went wrong!', error: err.message });
   });
 
   // Handle undefined routes
   app.use('*', (req, res) => {
+    console.log('404 - Route not found:', req.originalUrl);
     res.status(404).json({ message: 'Route not found' });
   });
+
+  console.log('App initialization completed');
 }
 
 initializeApp().catch(error => {
