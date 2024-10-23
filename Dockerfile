@@ -16,9 +16,11 @@ COPY . .
 # Build the application
 RUN cd client && npm install && npm run build
 
+# Install a simple server for serving static content
+RUN npm install -g serve
+
 # Expose the port the app runs on
 EXPOSE 3000
 
 # Define the command to run the app
-CMD ["npm", "start"]
-
+CMD ["serve", "-s", "client/dist", "-l", "3000"]

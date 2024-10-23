@@ -3,7 +3,22 @@ import react from "@vitejs/plugin-react";
 import path from 'path';
 
 export default defineConfig(({ mode }) => ({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'ignore-favicon',
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url === '/favicon.ico') {
+            res.writeHead(204);
+            res.end();
+          } else {
+            next();
+          }
+        });
+      },
+    },
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -17,7 +32,15 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     sourcemap: mode === 'development',
-    outDir: 'dist'
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]'
+      }
+    }
   },
   server: {
     open: true,
