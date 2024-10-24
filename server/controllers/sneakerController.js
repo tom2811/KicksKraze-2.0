@@ -10,16 +10,21 @@ const parseQueryParams = (query) => ({
 });
 
 const buildMongoQuery = (brands, searchQuery) => {
-  let query = {};
+  const query = {};
   if (brands.length > 0) query.brand = { $in: brands };
   if (searchQuery) query.name = { $regex: searchQuery, $options: 'i' };
   return query;
 };
 
 const getSortOrder = (sortOrder) => {
-  if (sortOrder === 'highToLow') return { price: -1 };
-  if (sortOrder === 'lowToHigh') return { price: 1 };
-  return {};
+  switch (sortOrder) {
+    case 'highToLow':
+      return { price: -1 };
+    case 'lowToHigh':
+      return { price: 1 };
+    default:
+      return {};
+  }
 };
 
 // Controller Functions
@@ -34,14 +39,12 @@ exports.getAllSneakers = async (req, res) => {
       Sneaker.find(query).sort(sort).skip((page - 1) * limit).limit(limit).lean()
     ]);
 
-    const result = {
+    res.json({
       sneakers,
       currentPage: page,
       totalPages: Math.ceil(totalSneakers / limit),
       totalSneakers
-    };
-
-    res.json(result);
+    });
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -70,8 +73,19 @@ exports.getBrands = async (req, res) => {
       return acc;
     }, {});
 
-    const result = { brands, counts: brandCounts };
-    res.json(result);
+    res.json({ brands, counts: brandCounts });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
+exports.getFeaturedSneaker = async (req, res) => {
+  try {
+    const sneakers = await Sneaker.find().limit(1);
+    if (sneakers.length === 0) {
+      return res.status(404).json({ message: 'No sneakers found in the database' });
+    }
+    res.json(sneakers[0]);
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }

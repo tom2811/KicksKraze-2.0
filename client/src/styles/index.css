@@ -4,7 +4,7 @@
 
 /* Custom Properties */
 :root {
-  --accent-color: hsl(192 91% 36%);
+  --accent-color: hsl(192, 91%, 36%);
 }
 
 /* Custom TextField Styles */
@@ -91,7 +91,7 @@
 /* LoadingSpinner Styles */
 .spinner-wrapper {
   @apply flex justify-center items-center fixed top-0 left-0 w-full h-full z-50;
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0);
 }
 
 .spinner {
@@ -125,4 +125,40 @@
     font-size: 11px !important;
     padding: 0.15rem 0.5rem !important;
   }
+}
+
+@media (min-width: 768px) {
+  .home-content {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .home-content > div {
+    flex: 1;
+  }
+}
+
+/* Feature Card Styles */
+.feature-card {
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card-icon {
+  color: var(--accent-color);
+}
+
+.feature-card-title {
+  font-weight: 600;
+}
+
+.feature-card-description {
+  color: #4b5563;
 }

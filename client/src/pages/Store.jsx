@@ -105,7 +105,9 @@ function Store() {
         exactId: state.exactId ? null : state.exactId,
       });
     } finally {
-      updateState({ loading: false });
+      setTimeout(() => {
+        updateState({ loading: false });
+      }, 1000);
     }
   }, [
     state.currentPage,

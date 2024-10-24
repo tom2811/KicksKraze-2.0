@@ -6,7 +6,9 @@ const connectDB = require('./db/db');
 const sneakerRoutes = require('./routes/sneakerRoutes');
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -16,14 +18,12 @@ app.use('/api/sneakers', sneakerRoutes);
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
+// Catch-all handler for any requests that don't match the above
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
-const PORT = process.env.PORT || 5000;
-
+// Initialize the application
 async function initializeApp() {
   try {
     await connectDB();

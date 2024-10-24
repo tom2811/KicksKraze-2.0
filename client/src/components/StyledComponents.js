@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Heading } from '@radix-ui/themes';
+import { Heading, Text } from '@radix-ui/themes';
 
 // Constants
 export const DIM_COLOR = '#4A4A4A';
@@ -8,14 +8,14 @@ export const ACCENT_COLOR = 'hsl(192, 91%, 36%)';
 
 // Keyframes
 const shimmer = keyframes`
-  0% { background-position: 100% 0; }
-  25% { background-position: 80% 0; }
+  0% { background-position: 120% 0; }
   50% { background-position: 60% 0; }
-  75% { background-position: 40% 0; }
   100% { background-position: 20% 0; }
 `;
 
 // Styled Components
+
+// Logo
 export const Logo = styled.span`
   font-family: 'Caveat', cursive;
   color: white;
@@ -24,6 +24,7 @@ export const Logo = styled.span`
   -webkit-text-stroke: 1.5px ${ACCENT_COLOR};
 `;
 
+// Filter Menu
 export const FilterMenu = styled.div`
   @media (max-width: 767px) {
     max-height: ${props => props.$isOpen ? '300px' : '0'};
@@ -33,6 +34,7 @@ export const FilterMenu = styled.div`
   }
 `;
 
+// Fancy Button
 export const FancyButton = styled.button`
   background-color: white;
   color: ${DIM_COLOR};
@@ -74,12 +76,14 @@ export const FancyButton = styled.button`
   }
 `;
 
+// Mobile Fancy Button
 export const MobileFancyButton = styled(FancyButton)`
   width: auto;
   font-size: 0.75rem;
   padding: 0.25rem 0.6rem;
 `;
 
+// Animated Link
 export const AnimatedLink = styled(Link)`
   color: ${props => props.$dimColor};
   text-decoration: none;
@@ -99,6 +103,7 @@ export const AnimatedLink = styled(Link)`
   }
 `;
 
+// Shimmering Heading
 export const ShimmeringHeading = styled(Heading)`
   background: linear-gradient(
     90deg,
@@ -112,5 +117,5 @@ export const ShimmeringHeading = styled(Heading)`
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  animation: ${shimmer} 5s linear infinite;
+  animation: ${shimmer} 4s linear infinite;
 `;

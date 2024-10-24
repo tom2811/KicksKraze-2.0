@@ -39,7 +39,7 @@ function App() {
                   <Route path="/store" element={<Store />} />
                 </Routes>
               </main>
-              <Footer />
+              {!isLoading && <Footer />}
             </div>
           </Theme>
         </CartProvider>

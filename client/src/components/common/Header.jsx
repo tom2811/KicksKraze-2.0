@@ -146,18 +146,19 @@ function Header() {
           isCartOpen={isCartOpen}
         />
         <Flex direction="column" align="center" gap="6" className="w-full">
-          <MobileNavLink to="/" isActive={location.pathname === "/"}>
+          <MobileNavLink to="/" isActive={location.pathname === "/"} toggleMenu={toggleMenu}>
             Home
           </MobileNavLink>
           <MobileNavLink
             as="button"
             onClick={handleStoreClick}
             isActive={location.pathname === "/store"}
+            toggleMenu={toggleMenu}
           >
             Store
           </MobileNavLink>
           {currentUser && (
-            <MobileNavLink as="button" onClick={logout}>
+            <MobileNavLink as="button" onClick={() => { logout(); toggleMenu(); }}>
               Logout
             </MobileNavLink>
           )}
@@ -212,11 +213,19 @@ function Header() {
   );
 }
 
-function MobileNavLink({ children, isActive, ...props }) {
+function MobileNavLink({ children, isActive, toggleMenu, ...props }) {
+  const handleClick = (e) => {
+    if (props.onClick) {
+      props.onClick(e);
+    }
+    toggleMenu();
+  };
+
   return (
     <Text
       as={props.as || Link}
       {...props}
+      onClick={handleClick}
       size="2"
       className={`text-gray-600 hover:text-cyan-500 transition-colors duration-200 ${
         isActive ? "text-cyan-500" : ""

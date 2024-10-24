@@ -16,6 +16,7 @@
     "@react-three/fiber": "^8.17.10",
     "axios": "^1.7.7",
     "firebase": "^10.8.0",
+    "framer-motion": "^11.11.9",
     "ldrs": "^1.0.2",
     "mdb-react-ui-kit": "^7.2.0",
     "react": "^18.2.0",

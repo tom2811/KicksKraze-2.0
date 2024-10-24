@@ -6,6 +6,7 @@ const api = axios.create({
   baseURL: API_URL,
 });
 
+// Fetch all sneakers with optional filters
 export const getAllSneakers = async (page, limit, brands, sortOrder, searchQuery = '') => {
   try {
     const response = await api.get('/sneakers', {
@@ -18,6 +19,7 @@ export const getAllSneakers = async (page, limit, brands, sortOrder, searchQuery
   }
 };
 
+// Fetch a sneaker by its ID
 export const getSneakerById = async (id) => {
   try {
     const response = await api.get(`/sneakers/${id}`);
@@ -27,6 +29,7 @@ export const getSneakerById = async (id) => {
   }
 };
 
+// Search sneakers by term
 export const searchSneakers = async (term) => {
   try {
     const response = await api.get('/sneakers/search', {
@@ -34,6 +37,17 @@ export const searchSneakers = async (term) => {
     });
     return response.data;
   } catch (error) {
+    throw error;
+  }
+};
+
+// Fetch the featured sneaker
+export const getFeaturedSneaker = async () => {
+  try {
+    const response = await api.get('/sneakers/featured');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching featured sneaker:', error);
     throw error;
   }
 };
